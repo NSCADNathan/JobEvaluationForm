@@ -37,4 +37,5 @@ A secure, offline-capable web tool designed to help NSCAD Unit II employees (Tec
 This tool is an **resource** created to assist union members.
 
 * **Source Data:** All factors, weights, and descriptions are derived from the *FUNSCAD Unit II Collective Agreement* and *Job Evaluation Manual*.
-* **Accuracy:** While every effort has been made to ensure the math matches the official worksheet logic, the final authority
+* **Accuracy:** While every effort has been made to ensure the math matches the official worksheet logic, the final authority is the Joint Evaluation Committee
+  
