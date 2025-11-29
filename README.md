@@ -12,7 +12,7 @@ A secure, offline-capable web tool designed to help NSCAD Unit II employees (Tec
 * **Privacy First:** This is a "Single File Application." No data is sent to any server. Your inputs are saved locally in your browser so you can close the tab and come back later.
 * **Smart Calculation:** Automatically handles the non-linear weighting curves for "Responsibility" and "Supervision" factors.
 * **Salary Matrix Integration:** Instantly see where your point total places you on the July 1, 2025 Salary Scale.
-* **Backup & Restore:** Save your evaluation as a `.json` file to keep a personal backup or share with a union representative.
+* **Backup & Restore:** Save your evaluation as a `.nate` file to keep a personal backup or share with a union representative.
 
 ## 🚀 How to Use
 
