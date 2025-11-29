@@ -1,9 +1,8 @@
-# NSCAD Unit II Job Evaluator (Unofficial)
+# NSCAD Unit II Job Evaluator
 
 A secure, offline-capable web tool designed to help NSCAD Unit II employees (Technicians & Educational Resource Personnel) calculate their Job Evaluation points and determine their Salary Group.
 
-🔗 **[Click here to use the Calculator](https://YOUR_USERNAME.github.io/YOUR_REPO_NAME/)**
-*(Replace the link above after you set up GitHub Pages)*
+🔗 **[Click here to use the Calculator](https://nscadnathan.github.io/JobEvaluationForm/)**
 
 ---
 
@@ -35,7 +34,7 @@ A secure, offline-capable web tool designed to help NSCAD Unit II employees (Tec
 
 ## ⚖️ Disclaimer
 
-This tool is an **unofficial resource** created to assist union members.
+This tool is an **resource** created to assist union members.
 
 * **Source Data:** All factors, weights, and descriptions are derived from the *FUNSCAD Unit II Collective Agreement* and *Job Evaluation Manual*.
 * **Accuracy:** While every effort has been made to ensure the math matches the official worksheet logic, the final authority
