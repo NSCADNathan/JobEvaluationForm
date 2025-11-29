@@ -1,276 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NSCAD Unit II Evaluator (v10)</title>
-    <style>
-        :root {
-            --primary: #005596;
-            --dark: #222;
-            --light: #f4f7f6;
-            --white: #fff;
-            --accent: #ffcc00;
-            --border: #ddd;
-            --highlight-row: #fff8c4;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NSCAD Unit II Evaluator (Nate Edition)</title>
+<style>
+    /* THEME: Clean, high-contrast, professional */
+    :root{--bg:#f8f9fa; --card:#ffffff; --text:#212529; --mute:#6c757d; --pri:#5e35b1; --acc:#d81b60; --border:#dee2e6; --sel:#ede7f6;}
+    body{font-family:'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--text); margin:0; padding-bottom:120px; line-height:1.6;}
+    
+    /* HEADER */
+    header{background:#fff; border-bottom:3px solid var(--pri); padding:15px 20px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; box-shadow:0 4px 6px -1px rgba(0,0,0,0.1);}
+    h1{margin:0; font-size:1.25rem; text-transform:uppercase; color:var(--pri); letter-spacing:0.5px; font-weight:800;}
+    
+    .header-controls{display:flex; gap:8px;}
+    .action-btn{background:white; border:1px solid #ced4da; color:#495057; padding:6px 12px; cursor:pointer; font-size:0.85rem; border-radius:4px; font-weight:600; transition:all 0.2s; display:flex; align-items:center; gap:6px;}
+    .action-btn:hover{background:#e9ecef; transform:translateY(-1px);}
+    .action-btn:active{transform:translateY(0);}
+    .import-btn{border-color:#2e7d32; color:#2e7d32;}
+    .import-btn:hover{background:#e8f5e9;}
+    .save-btn{border-color:var(--pri); color:var(--pri);}
+    .save-btn:hover{background:var(--sel);}
+    .reset-btn{border-color:#c62828; color:#c62828;}
+    .reset-btn:hover{background:#ffebee;}
 
-        * { box-sizing: border-box; }
+    /* LAYOUT */
+    .container{max-width:900px; margin:30px auto; padding:0 15px;}
+    .card{background:var(--card); border-radius:8px; padding:30px; border:1px solid var(--border); box-shadow:0 2px 4px rgba(0,0,0,0.05); margin-bottom:20px; animation: fadeIn 0.3s ease-in-out;}
+    @keyframes fadeIn {from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);}}
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--light);
-            color: var(--dark);
-            margin: 0;
-            padding-bottom: 100px; /* Space for footer */
-        }
+    /* INPUTS */
+    .details-grid {display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-bottom:15px;}
+    .input-group {margin-bottom:15px;}
+    .input-label {display:block; font-size:0.75rem; font-weight:700; color:var(--mute); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;}
+    .input-field {width:100%; padding:10px; border:1px solid #ced4da; border-radius:4px; font-size:1rem; color:var(--text); box-sizing:border-box;}
+    .input-field:focus {border-color:var(--pri); outline:none; box-shadow:0 0 0 3px rgba(94, 53, 177, 0.1);}
+    select.input-field {background-color:white;}
 
-        /* HEADER */
-        header {
-            background: var(--primary);
-            color: var(--white);
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+    /* FACTORS & OPTIONS */
+    .factor-header{border-bottom:2px solid var(--pri); margin-bottom:20px; padding-bottom:15px; display:flex; justify-content:space-between; align-items:center;}
+    .factor-title{font-size:1.5rem; font-weight:800; color:var(--text); margin:0;}
+    .guide-btn{background:white; color:var(--pri); border:1px solid var(--pri); padding:6px 14px; border-radius:20px; font-weight:700; font-size:0.85rem; cursor:pointer; transition:all 0.2s;}
+    .guide-btn:hover{background:var(--pri); color:white;}
 
-        h1 { margin: 0; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; }
+    .options-list{display:grid; gap:12px; margin-top:15px;}
+    .opt-item{border:1px solid var(--border); border-radius:6px; padding:15px; cursor:pointer; background:white; transition:all 0.2s; position:relative;}
+    .opt-item:hover{border-color:var(--pri); transform:translateX(4px); box-shadow:0 2px 8px rgba(0,0,0,0.05);}
+    .opt-item.selected{border-color:var(--pri); background:var(--sel); border-left:5px solid var(--pri);}
+    .opt-head{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px;}
+    .opt-name{font-weight:700; font-size:1.05rem; color:var(--pri);}
+    .opt-score{background:var(--text); color:white; padding:2px 8px; border-radius:10px; font-weight:700; font-size:0.8rem;}
+    .opt-desc{font-size:0.95rem; color:#495057; line-height:1.5;}
 
-        .progress-track {
-            flex-grow: 1;
-            margin: 0 20px;
-            background: rgba(255,255,255,0.2);
-            height: 8px;
-            border-radius: 4px;
-            overflow: hidden;
-        }
+    /* SUB-CALCULATORS */
+    .sub-section{margin-top:25px; border:1px solid var(--border); border-radius:6px; padding:20px; background:#fafafa;}
+    .sub-title{font-weight:700; color:var(--text); margin-bottom:15px; font-size:1rem; text-transform:uppercase; border-bottom:2px solid #e9ecef; padding-bottom:5px;}
 
-        .progress-fill {
-            height: 100%;
-            background: var(--accent);
-            width: 0%;
-            transition: width 0.3s ease;
-        }
+    /* MODALS */
+    .modal-overlay{position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:none; justify-content:center; align-items:center; z-index:1000; backdrop-filter:blur(2px);}
+    .modal-content{background:white; width:90%; max-width:800px; max-height:85vh; border-radius:8px; display:flex; flex-direction:column; box-shadow:0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);}
+    .modal-header{padding:20px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; background:#f8f9fa;}
+    .close-btn{background:none; border:none; color:var(--mute); font-size:2rem; cursor:pointer; line-height:1;}
+    .close-btn:hover{color:var(--acc);}
+    .modal-body{padding:30px; overflow-y:auto; font-family:'Georgia', serif; font-size:1rem; line-height:1.7; white-space:pre-wrap; color:#333;}
+    
+    /* TABLES */
+    .salary-table{width:100%; border-collapse:collapse; font-size:0.9rem; font-family:sans-serif;}
+    .salary-table th, .salary-table td{border:1px solid var(--border); padding:10px; text-align:center;}
+    .salary-table th{background:var(--text); color:white; position:sticky; top:0;}
+    .salary-table tr.active-group{background:var(--sel); border:2px solid var(--pri);}
+    .salary-table tr.active-group td{color:var(--pri); font-weight:800;}
 
-        .reset-btn {
-            background: rgba(0,0,0,0.2);
-            border: 1px solid rgba(255,255,255,0.4);
-            color: white;
-            padding: 5px 10px;
-            font-size: 0.8rem;
-            border-radius: 4px;
-            cursor: pointer;
-        }
+    .summary-table {width:100%; border-collapse:collapse; margin-top:20px; text-align:left;}
+    .summary-table th {border-bottom:2px solid var(--pri); color:var(--pri); padding:10px;}
+    .summary-table td {border-bottom:1px solid var(--border); padding:12px 10px; color:var(--text); vertical-align:top;}
+    .summary-val {color:var(--pri); font-weight:700; text-align:right; white-space:nowrap;}
 
-        /* MAIN CONTENT */
-        .container {
-            max-width: 900px;
-            margin: 20px auto;
-            padding: 0 15px;
-            min-height: 400px;
-        }
+    /* FOOTER */
+    footer{position:fixed; bottom:0; left:0; width:100%; background:white; border-top:1px solid var(--border); padding:15px 0; z-index:200; box-shadow:0 -4px 6px -1px rgba(0,0,0,0.05);}
+    .footer-inner{max-width:900px; margin:0 auto; padding:0 15px; display:flex; justify-content:space-between; align-items:center;}
+    .status{display:flex; gap:30px;}
+    .stat-block{display:flex; flex-direction:column; cursor:pointer;}
+    .stat-lbl{font-size:0.7rem; text-transform:uppercase; color:var(--mute); font-weight:700; letter-spacing:0.5px;}
+    .stat-num{font-size:1.4rem; font-weight:800; color:var(--text);}
+    .group-tag{color:var(--pri); text-decoration:underline; text-decoration-thickness: 2px;}
+    .nav-btns{display:flex; gap:10px;}
+    .btn{padding:10px 25px; border:none; border-radius:4px; font-weight:700; cursor:pointer; font-size:1rem; transition:background 0.2s;}
+    .btn-back{background:#e9ecef; color:var(--text);}
+    .btn-back:hover{background:#dee2e6;}
+    .btn-next{background:var(--pri); color:white;}
+    .btn-next:hover{background:#512da8;}
 
-        .card {
-            background: var(--white);
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-            padding: 30px;
-            animation: slideIn 0.3s ease-out;
-        }
-
-        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .factor-header {
-            border-bottom: 2px solid var(--primary);
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .factor-title { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
-        
-        .guidebook-btn {
-            background: var(--white);
-            color: var(--primary);
-            border: 2px solid var(--primary);
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .guidebook-btn:hover { background: var(--primary); color: white; }
-        .guidebook-btn::before { content: "📖 "; }
-
-        /* OPTIONS GRID */
-        .options-list { display: grid; gap: 12px; }
-
-        .option-item {
-            border: 2px solid var(--border);
-            border-radius: 6px;
-            padding: 15px;
-            cursor: pointer;
-            transition: all 0.2s;
-            background: #fff;
-        }
-
-        .option-item:hover { border-color: #999; background: #fafafa; }
-
-        .option-item.selected {
-            border-color: var(--primary);
-            background-color: #f0f7ff;
-            box-shadow: 0 0 0 1px var(--primary);
-        }
-
-        .opt-head { display: flex; justify-content: space-between; margin-bottom: 5px; }
-        .opt-name { font-weight: 700; color: var(--primary); font-size: 1rem; }
-        .opt-score { background: var(--primary); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; }
-        .opt-desc { font-size: 0.9rem; color: #555; }
-
-        /* SUB-FACTORS (Working Conditions) */
-        .sub-section { margin-top: 20px; border-top: 1px dashed #ccc; padding-top: 15px; }
-        .sub-title { font-weight: bold; color: #333; margin-bottom: 10px; }
-
-        /* MODAL */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            backdrop-filter: blur(2px);
-        }
-        
-        .modal-content {
-            background: white;
-            width: 95%;
-            max-width: 900px;
-            max-height: 90vh;
-            border-radius: 8px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .modal-header {
-            padding: 15px 20px;
-            background: var(--primary);
-            color: white;
-            border-radius: 8px 8px 0 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .modal-title { font-weight: bold; font-size: 1.2rem; }
-        .close-btn { background: none; border: none; color: white; font-size: 1.8rem; cursor: pointer; line-height: 1; }
-        
-        .modal-body {
-            padding: 25px;
-            overflow-y: auto;
-            color: #333;
-            font-family: 'Times New Roman', serif;
-            font-size: 1.1rem;
-            line-height: 1.6;
-        }
-
-        /* Salary Table */
-        .salary-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.85rem;
-            margin-top: 10px;
-            font-family: sans-serif;
-        }
-        .salary-table th, .salary-table td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: center;
-        }
-        .salary-table th { background-color: #f2f2f2; position: sticky; top: 0; }
-        .salary-table tr.active-group {
-            background-color: var(--highlight-row);
-            border: 2px solid var(--accent);
-        }
-        .salary-table tr.active-group td:first-child {
-            font-weight: bold;
-            color: var(--primary);
-            border-left: 5px solid var(--primary);
-        }
-
-        /* Guidebook Text Styles */
-        .gb-heading { font-family: sans-serif; font-weight: bold; text-transform: uppercase; color: var(--primary); margin-top: 20px; border-bottom: 1px solid #eee; padding-bottom: 5px; font-size: 1rem; }
-        .gb-text { margin-bottom: 15px; white-space: pre-wrap; }
-        .gb-list { padding-left: 20px; margin-bottom: 15px; }
-
-        /* FOOTER */
-        footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: #fff;
-            border-top: 1px solid #ccc;
-            padding: 15px 0;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
-            z-index: 200;
-        }
-
-        .footer-inner {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .status { display: flex; gap: 20px; }
-        .stat-block { display: flex; flex-direction: column; }
-        .stat-lbl { font-size: 0.7rem; text-transform: uppercase; color: #777; }
-        .stat-num { font-size: 1.4rem; font-weight: bold; color: var(--dark); }
-        .group-tag { color: var(--primary); text-decoration: underline; cursor: pointer; }
-        .group-tag::after { content: " ℹ️"; font-size: 0.8rem; text-decoration: none; }
-
-        .nav-btns { display: flex; gap: 10px; }
-        .btn { padding: 12px 24px; border: none; border-radius: 4px; font-weight: bold; font-size: 1rem; cursor: pointer; }
-        .btn-back { background: #eee; color: #333; }
-        .btn-next { background: var(--primary); color: white; }
-        .btn-next:disabled { background: #ccc; cursor: not-allowed; }
-
-        #error-msg { color: red; text-align: center; margin-top: 20px; display: none; font-weight: bold; }
-    </style>
+    /* PRINT STYLES */
+    @media print {
+        body {background:white; color:black; padding:0; margin:0;}
+        header, footer, .guide-btn, .header-controls, .btn-print-hide, .nav-btns {display:none !important;}
+        .container {max-width:100%; margin:0; padding:20px;}
+        .card {border:none; box-shadow:none; padding:0; background:white; color:black; border-bottom:1px solid #ccc; margin-bottom:30px;}
+        .input-field {border:none; padding:0; font-weight:bold; font-family:'Times New Roman', serif;}
+        .summary-table th {color:black; border-bottom:2px solid black;}
+        .summary-table td {color:black; border-bottom:1px solid #ccc;}
+        .summary-val {color:black;}
+        h1, h2, h3 {color:black !important; page-break-after:avoid;}
+        .print-only {display:block;}
+        .print-header {display:block !important; text-align:center; margin-bottom:30px; border-bottom:2px solid black; padding-bottom:10px;}
+    }
+</style>
 </head>
 <body>
 
-<header>
+<div id="crash-screen" style="display:none; padding:50px; text-align:center; font-family:sans-serif;">
+    <h1 style="color:#c62828;">⚠️ Tool Error</h1>
+    <p>The saved data in your browser is from an old version and is causing a conflict.</p>
+    <button onclick="localStorage.removeItem('nscad_nate_data'); location.reload();" style="padding:15px 30px; font-size:1.2rem; cursor:pointer; background:#c62828; color:white; border:none; border-radius:5px;">Click Here to Repair</button>
+</div>
+
+<header id="main-header">
     <h1>Unit II Evaluator</h1>
-    <div class="progress-track">
-        <div class="progress-fill" id="progressBar"></div>
+    <div class="header-controls">
+        <button class="action-btn import-btn" onclick="document.getElementById('fileInput').click()">📂 Load .nate</button>
+        <button class="action-btn save-btn" onclick="exportData()">💾 Save .nate</button>
+        <button class="action-btn reset-btn" onclick="hardReset()">↺ Reset</button>
+        <input type="file" id="fileInput" accept=".nate,.json,.txt" style="display:none" onchange="importData(this)">
     </div>
-    <button class="reset-btn" onclick="hardReset()">Reset</button>
 </header>
 
-<div id="error-msg"></div>
 <div class="container" id="app-content"></div>
 
 <div class="modal-overlay" id="guideModal">
     <div class="modal-content">
         <div class="modal-header">
-            <div class="modal-title" id="modalTitle">Guidebook Text</div>
+            <h2 class="factor-title" id="modalTitle">Guidebook</h2>
             <button class="close-btn" onclick="closeModal('guideModal')">×</button>
         </div>
         <div class="modal-body" id="modalBody"></div>
@@ -278,33 +138,26 @@
 </div>
 
 <div class="modal-overlay" id="salaryModal">
-    <div class="modal-content" style="max-width: 1000px;">
+    <div class="modal-content" style="max-width:1000px;">
         <div class="modal-header">
-            <div class="modal-title">Salary Grid (July 1, 2025) [cite: 2248-2250]</div>
+            <h2 class="factor-title">Salary Grid (July 1, 2025)</h2>
             <button class="close-btn" onclick="closeModal('salaryModal')">×</button>
         </div>
         <div class="modal-body">
-            <table class="salary-table" id="salaryTable">
-                <thead>
-                    <tr><th>Group</th><th>Step 1</th><th>Step 2</th><th>Step 3</th><th>Step 4</th><th>Step 5</th><th>Step 6</th><th>Step 7</th><th>Step 8</th></tr>
-                </thead>
+            <table class="salary-table">
+                <thead><tr><th>Group</th><th>Step 1</th><th>Step 2</th><th>Step 3</th><th>Step 4</th><th>Step 5</th><th>Step 6</th><th>Step 7</th><th>Step 8</th></tr></thead>
                 <tbody id="salaryBody"></tbody>
             </table>
+            [cite_start]<p style="margin-top:15px; font-style:italic; font-size:0.9rem; color:var(--mute);">*Salary data from Collective Agreement Appendix F (2025) [cite: 2184-2186].</p>
         </div>
     </div>
 </div>
 
-<footer>
+<footer id="main-footer">
     <div class="footer-inner">
         <div class="status">
-            <div class="stat-block">
-                <span class="stat-lbl">Points</span>
-                <span class="stat-num" id="totalPoints">0</span>
-            </div>
-            <div class="stat-block" onclick="openSalaryModal()">
-                <span class="stat-lbl">Pay Group (Click for Matrix)</span>
-                <span class="stat-num group-tag" id="payGroup">-</span>
-            </div>
+            <div class="stat-block"><span class="stat-lbl">Total Points</span><span class="stat-num" id="totalPoints">0</span></div>
+            <div class="stat-block" onclick="openSal()"><span class="stat-lbl">Est. Group</span><span class="stat-num group-tag" id="payGroup">-</span></div>
         </div>
         <div class="nav-btns">
             <button class="btn btn-back" id="btnBack" onclick="prevStep()">Back</button>
@@ -314,328 +167,208 @@
 </footer>
 
 <script>
-    // --- 1. DATA ---
-    const factors = [
-        {
-            id: 'edu', title: '1. Education', weight: 13, max: 39,
-            fullText: `<div class="gb-heading">EDUCATION</div><div class="gb-text"><strong>DEGREE 1</strong><br>Undergraduate Degree or equivalent.<br><br><strong>DEGREE 2</strong><br>Undergraduate degree in specific skilled area or equivalent or an undergraduate degree and a diploma or apprenticeship in specific skilled area or equivalent.<br><br><strong>DEGREE 3</strong><br>Graduate degree in specific skilled area, or equivalent.</div><div class="gb-heading">Notes on Education</div><ul class="gb-list"><li>"Degree and Diploma" refer to successful completion of accredited educational program.</li><li>"Equivalent" refers to formal training in a non-accredited or non-institutional setting.</li></ul>[cite: 1878-1888]`,
-            options: [
-                { p: 13, t: "Degree 1", d: "Undergraduate Degree or equivalent." },
-                { p: 26, t: "Degree 2", d: "Undergrad in specific skilled area OR degree + diploma." },
-                { p: 39, t: "Degree 3", d: "Graduate degree in specific skilled area." }
-            ]
-        },
-        {
-            id: 'exp', title: '2. Experience', weight: 20, max: 60,
-            fullText: `<div class="gb-heading">EXPERIENCE</div><div class="gb-text"><strong>DEGREE 1</strong><br>Up to two years directly related experience...<br><br><strong>DEGREE 2</strong><br>Three to four years directly related experience...<br><br><strong>DEGREE 3</strong><br>Five or more years directly related experience...</div><div class="gb-heading">Experience Definition</div><div class="gb-text">Directly related experience consists of two parts: (1) the practical application of the knowledge and skills required to do the job and (2) delivery of skills and knowledge to people in a learning environment.</div>[cite: 1891-1900]`,
-            options: [
-                { p: 20, t: "Degree 1", d: "Up to 2 years related experience." },
-                { p: 40, t: "Degree 2", d: "3 to 4 years related experience." },
-                { p: 60, t: "Degree 3", d: "5+ years related experience." }
-            ]
-        },
-        {
-            id: 'comp', title: '3. Complexity / Judgement', weight: 25, max: 125,
-            fullText: `<div class="gb-heading">PROBLEM SOLVING/COMPLEXITY/JUDGEMENT</div><div class="gb-text"><strong>DEGREE 1</strong><br>Limited analysis. Assignments generally standardized.<br><br><strong>DEGREE 2</strong><br>Moderate analysis. Adapting established methods.<br><br><strong>DEGREE 3</strong><br>Interpretative skill. Recommends changes.<br><br><strong>DEGREE 4</strong><br>Complex analysis. Unique situations. Development of methods.<br><br><strong>DEGREE 5</strong><br>All of Degree 4 plus the recommendation of change to established policies.</div>[cite: 1902-1926]`,
-            options: [
-                { p: 25, t: "Degree 1", d: "Limited analysis. Standardized assignments." },
-                { p: 50, t: "Degree 2", d: "Moderate analysis. Adapting established methods." },
-                { p: 75, t: "Degree 3", d: "Interpretative skill. Recommends changes." },
-                { p: 100, t: "Degree 4", d: "Complex analysis. Unique situations." },
-                { p: 125, t: "Degree 5", d: "Degree 4 + Policy Recommendations." }
-            ]
-        },
-        {
-            id: 'resp', title: '4. Responsibility / Accountability', weight: 18, max: 125,
-            fullText: `<div class="gb-heading">RESPONSIBILITY/ACCOUNTABILITY</div><div class="gb-text"><strong>DEGREE 1</strong><br>Overseeing the application of department policies during shift.<br><br><strong>DEGREE 2</strong><br>Full range of duties related to a separate, limited access area or function.<br><br><strong>DEGREE 3</strong><br>Limited aspect of a separate open access area.<br><br><strong>DEGREE 4</strong><br>Full range of duties related to a separate open access area on a regular basis.<br><br><strong>DEGREE 5</strong><br>Oversees a complete departmental area. Assumes management responsibility.<br><br><strong>DEGREE 6</strong><br>Oversees complete area with multiple functions. Small-scale budget.<br><br><strong>DEGREE 7</strong><br>Management of area of significant scope. Large-scale budget.</div>[cite: 1959-1979]`,
-            options: [
-                { p: 18, t: "Degree 1", d: "Oversee policies during shift." },
-                { p: 36, t: "Degree 2", d: "Full duties, LIMITED ACCESS area." },
-                { p: 54, t: "Degree 3", d: "Limited aspect of OPEN ACCESS area." },
-                { p: 71, t: "Degree 4", d: "Full duties, OPEN ACCESS area." },
-                { p: 89, t: "Degree 5", d: "Oversees complete dept area. Mgmt in absence." },
-                { p: 107, t: "Degree 6", d: "Multiple functions. Small-scale budget." },
-                { p: 125, t: "Degree 7", d: "Significant scope. Large-scale budget." }
-            ]
-        },
-        {
-            id: 'supO', title: '5. Supervision of Others', weight: 18, max: 125,
-            fullText: `<div class="gb-heading">SUPERVISION OF OTHERS</div><div class="gb-text"><strong>DEGREE 1</strong> No supervision.<br><strong>DEGREE 2</strong> Monitor 1-4 Student Assistants.<br><strong>DEGREE 3</strong> 5+ Student Assistants OR Recruiting.<br><strong>DEGREE 4</strong> 1 Part-Time Unit II Employee.<br><strong>DEGREE 5</strong> 2+ Part-Time Unit II.<br><strong>DEGREE 6</strong> 1 Full-Time & 2+ Part-Time.<br><strong>DEGREE 7</strong> 2+ Full-Time Unit II.</div>[cite: 2009-2034]`,
-            options: [
-                { p: 18, t: "Degree 1", d: "No supervision." },
-                { p: 36, t: "Degree 2", d: "1-4 Student Assistants." },
-                { p: 54, t: "Degree 3", d: "5+ Student Assistants OR Recruiting duties." },
-                { p: 71, t: "Degree 4", d: "1 Part-Time Unit II Employee." },
-                { p: 89, t: "Degree 5", d: "2+ Part-Time Unit II Employees." },
-                { p: 107, t: "Degree 6", d: "1 Full-Time & 2+ Part-Time." },
-                { p: 125, t: "Degree 7", d: "2+ Full-Time." }
-            ]
-        },
-        {
-            id: 'supR', title: '6. Supervision Received', weight: 15, max: 75,
-            fullText: `<div class="gb-heading">SUPERVISION RECEIVED</div><div class="gb-text"><strong>DEGREE 1</strong> Supervisor available daily.<br><strong>DEGREE 2</strong> Daily for majority tasks, weekly for expertise.<br><strong>DEGREE 3</strong> No daily access to expert. Prioritizing necessary.<br><strong>DEGREE 4</strong> No daily access. Research required. Conflicting suggestions.<br><strong>DEGREE 5</strong> Works without supervision.</div>[cite: 2062-2084]`,
-            options: [
-                { p: 15, t: "Degree 1", d: "Supervisor available daily." },
-                { p: 30, t: "Degree 2", d: "Daily for majority, weekly for expertise." },
-                { p: 45, t: "Degree 3", d: "No daily access. Prioritizing necessary." },
-                { p: 60, t: "Degree 4", d: "Research required. Conflicting suggestions." },
-                { p: 75, t: "Degree 5", d: "Works without supervision." }
-            ]
-        },
-        {
-            id: 'cont', title: '7. Contacts', weight: 5, max: 50,
-            fullText: `<div class="gb-heading">CONTACTS</div><div class="gb-text"><strong>DEGREE 1-2</strong> Basic verbal.<br><strong>DEGREE 3-4</strong> Tact and discretion required.<br><strong>DEGREE 5-6</strong> Tact and diplomacy required.<br><strong>DEGREE 7-8</strong> Influencing, persuading, securing cooperation.<br><strong>DEGREE 9-10</strong> Negotiating highly sensitive issues.</div>[cite: 2099-2120]`,
-            options: [
-                { p: 5, t: "Degree 1", d: "Basic / Occasional." },
-                { p: 10, t: "Degree 2", d: "Basic / Moderate." },
-                { p: 15, t: "Degree 3", d: "Tact required / Occasional." },
-                { p: 20, t: "Degree 4", d: "Tact required / Moderate." },
-                { p: 25, t: "Degree 5", d: "Diplomacy / Occasional." },
-                { p: 30, t: "Degree 6", d: "Diplomacy / Moderate." },
-                { p: 35, t: "Degree 7", d: "Influencing / Occasional." },
-                { p: 40, t: "Degree 8", d: "Influencing / Moderate." },
-                { p: 45, t: "Degree 9", d: "Negotiating / Occasional." },
-                { p: 50, t: "Degree 10", d: "Negotiating / Moderate." }
-            ]
-        },
-        {
-            id: 'cond', title: '8. Working Conditions', weight: 5, max: 15,
-            isSub: true,
-            fullText: `<div class="gb-heading">WORKING CONDITIONS</div><div class="gb-text"><strong>I. Hazards</strong><br>a1) Occasional exposure to Minor Hazards (mold, dust, older buildings). (0.5 pts)<br>a2) Occasional exposure to Major Hazards (air-borne particles, fumes, sawdust, smoke, toxic chemicals, dangerous equipment and machinery, electrical hazards, noise, excessive heat or cold, vibrations). (1 pt)<br>b) Frequent or routine exposure to Minor Hazards. (2 pts)<br>c) Frequent or routine exposure to Major Hazards. (3 pts)<br><br><strong>II. Unpleasant Conditions</strong><br>a) Few interruptions (1 pt)<br>b) Occasional interruptions (2 pts)<br>c) Frequent interruptions (3 pts)<br><br><strong>III. Exposure</strong><br>a) Occasional exposure to unpleasant/demanding staff/students (1 pt)<br>b) Routine encounters with upset staff/students (2 pts)<br>c) Routine encounters with upset staff/students AND general public (3 pts)<br><br><strong>IV. Space</strong><br>a) Private space (1 pt)<br>b) Access to private space part of day (2 pts)<br>c) Public space all day (3 pts)<br><br><strong>V. Working Hours</strong><br>a) Regular 9-5 (1 pt)<br>b) Occasional evenings/weekends (2 pts)<br>c) Always non-business hours (3 pts)</div>[cite: 2156-2210]`,
-            subs: [
-                { id: 'c_haz', t: 'I. Hazards', opts: [
-                    {p: 0.5, t: "0.5 pts", d: "Occasional Minor Hazards (dust, old buildings)"},
-                    {p: 1.0, t: "1.0 pts", d: "Occasional Major Hazards (fumes/toxics/machinery) OR Frequent Minor"},
-                    {p: 2.0, t: "2.0 pts", d: "Frequent/Routine Minor Hazards"},
-                    {p: 3.0, t: "3.0 pts", d: "Frequent/Routine Major Hazards"}
-                ]},
-                { id: 'c_unp', t: 'II. Unpleasantness', opts: [
-                    {p: 1, t: "1 pt", d: "Few interruptions"},
-                    {p: 2, t: "2 pts", d: "Occasional interruptions"},
-                    {p: 3, t: "3 pts", d: "Frequent interruptions"}
-                ]},
-                { id: 'c_exp', t: 'III. Exposure', opts: [
-                    {p: 1, t: "1 pt", d: "Occasional unpleasant"},
-                    {p: 2, t: "2 pts", d: "Routine upset staff"},
-                    {p: 3, t: "3 pts", d: "Routine upset public"}
-                ]},
-                { id: 'c_spc', t: 'IV. Space', opts: [
-                    {p: 1, t: "1 pt", d: "Private space"},
-                    {p: 2, t: "2 pts", d: "Part-time private"},
-                    {p: 3, t: "3 pts", d: "Public space"}
-                ]},
-                { id: 'c_hrs', t: 'V. Hours', opts: [
-                    {p: 1, t: "1 pt", d: "Regular 9-5"},
-                    {p: 2, t: "2 pts", d: "Occasional off-hours"},
-                    {p: 3, t: "3 pts", d: "Always non-business"}
-                ]}
-            ]
-        },
-        {
-            id: 'safe', title: '9. Safety of Others', weight: 10, max: 40,
-            fullText: `<div class="gb-heading">SAFETY OF OTHERS</div><div class="gb-text"><strong>DEGREE 1</strong> Little degree of care required (closing drawers, fire exits).<br><strong>DEGREE 2</strong> Some degree of care (stacking supplies, wet floor signs).<br><strong>DEGREE 3</strong> Considerable degree of care (guards, PPE, occasional hazardous materials/equipment).<br><strong>DEGREE 4</strong> High degree of care (Routine use of hazardous materials and/or equipment).</div>[cite: 2212-2235]`,
-            options: [
-                { p: 10, t: "Degree 1", d: "Little care (file drawers)." },
-                { p: 20, t: "Degree 2", d: "Some care (stacking, signs)." },
-                { p: 30, t: "Degree 3", d: "Considerable care (guards, haz mat/equipment)." },
-                { p: 40, t: "Degree 4", d: "High degree (Routine haz mat/equipment)." }
-            ]
-        },
-        {
-            id: 'dext', title: '10. Dexterity', weight: 5, max: 15,
-            fullText: `<div class="gb-heading">DEXTERITY</div><div class="gb-text"><strong>DEGREE 1</strong> No fine movements required.<br><strong>DEGREE 2</strong> Accurate coarse movements OR fine movements where speed is secondary.<br><strong>DEGREE 3</strong> Accurate fine movements AND speed is a consideration.</div>[cite: 2237-2245]`,
-            options: [
-                { p: 5, t: "Degree 1", d: "Normal. No fine movements." },
-                { p: 10, t: "Degree 2", d: "Accurate coarse OR slow fine." },
-                { p: 15, t: "Degree 3", d: "Accurate fine AND speed." }
-            ]
-        },
-        {
-            id: 'phys', title: '11. Physical Demands', weight: 1, max: 12,
-            fullText: `<div class="gb-heading">PHYSICAL DEMANDS</div><div class="gb-text">Light <= 1 hr (1 pt)<br>Light <= 1 hr (Freq) (2 pts)<br>Mod/Heavy <= 1 hr (3 pts)<br>Mod/Heavy <= 1 hr (Freq) (4 pts)<br>Light 1-2 hrs (5 pts)<br>Light 1-2 hrs (Freq) (6 pts)<br>Mod/Heavy 1-2 hrs (7 pts)<br>Mod/Heavy 1-2 hrs (Freq) (8 pts)<br>Light > 2 hrs (9 pts)<br>Light > 2 hrs (Freq) (10 pts)<br>Mod/Heavy > 2 hrs (11 pts)<br>Mod/Heavy > 2 hrs (Freq) (12 pts)</div>[cite: 2269-2276]`,
-            options: [
-                { p: 1, t: "Level 1", d: "Light <= 1 hr" }, { p: 2, t: "Level 2", d: "Light <= 1 hr (Freq)" },
-                { p: 3, t: "Level 3", d: "Mod/Heavy <= 1 hr" }, { p: 4, t: "Level 4", d: "Mod/Heavy <= 1 hr (Freq)" },
-                { p: 5, t: "Level 5", d: "Light 1-2 hrs" }, { p: 6, t: "Level 6", d: "Light 1-2 hrs (Freq)" },
-                { p: 7, t: "Level 7", d: "Mod/Heavy 1-2 hrs" }, { p: 8, t: "Level 8", d: "Mod/Heavy 1-2 hrs (Freq)" },
-                { p: 9, t: "Level 9", d: "Light > 2 hrs" }, { p: 10, t: "Level 10", d: "Light > 2 hrs (Freq)" },
-                { p: 11, t: "Level 11", d: "Mod/Heavy > 2 hrs" }, { p: 12, t: "Level 12", d: "Mod/Heavy > 2 hrs (Freq)" }
-            ]
-        },
-        {
-            id: 'ment', title: '12. Mental Effort', weight: 20, max: 80,
-            fullText: `<div class="gb-heading">MENTAL EFFORT</div><div class="gb-text"><strong>DEGREE 1</strong> Low/normal concentration.<br><strong>DEGREE 2</strong> Moderate concentration (short duration).<br><strong>DEGREE 3</strong> Moderate/High concentration (2-3 hrs).<br><strong>DEGREE 4</strong> High concentration for most of the day.</div>[cite: 2279-2291]`,
-            options: [
-                { p: 20, t: "Degree 1", d: "Low/normal concentration." },
-                { p: 40, t: "Degree 2", d: "Moderate concentration (short duration)." },
-                { p: 60, t: "Degree 3", d: "Mod/High concentration (2-3 hrs). Busy." },
-                { p: 80, t: "Degree 4", d: "High concentration. Hectic." }
-            ]
-        },
-        {
-            id: 'inst', title: '13. Instruction', weight: 25, max: 100,
-            fullText: `<div class="gb-heading">INSTRUCTION DELIVERY</div><div class="gb-text"><strong>DEGREE 1</strong> Instructions to new students on proper use.<br><strong>DEGREE 2</strong> One-on-one assistance. Moderately complex.<br><strong>DEGREE 3</strong> Full class or one-on-one. Documentation/charts.<br><strong>DEGREE 4</strong> Full class or one-on-one for COMPLEX procedures. Improving mastery.</div>[cite: 2333-2347]`,
-            options: [
-                { p: 25, t: "Degree 1", d: "Intro to new students." },
-                { p: 50, t: "Degree 2", d: "One-on-one assistance." },
-                { p: 75, t: "Degree 3", d: "Full class OR One-on-one + docs." },
-                { p: 100, t: "Degree 4", d: "Complex procedures. Mastery." }
-            ]
+/* DATA SOURCE: JOB EVALUATION MANUAL.pdf (Updated 09/13/24)
+   POSITIONS SOURCE: Appendix H, Collective Agreement
+   SCORING SOURCE: worksheet calculator.pdf
+*/
+
+const positions = ["Academic Computing Technician","Ceramics Technician","Design Print & Publishing Technician","Exhibitions Coordinator","Fashion Technician","Film/Media Technician","General and Digital Fabrication Technician","Inter Library Loans/Serials Technician","Jewellery Technician","Library Technician, Cataloguing","Library Technician, Supervisor, Circulation","Media/Academic Computing Technician","Metalshop Technician","Multimedia Technician, Academic Computing","Multimedia Technician, Educational Technology","Multimedia Technician, Software and Equipment","Painting/Drawing Technician","Photo Media Technician, Light Sensitive Processing","Photography Technician, Digital Processes and Infrastructure","Printmaking Technician","Sculpture Technician","Textiles Technician","Woodshop Technician"];
+
+const factors = [
+    {id:'edu', t:'1. Education', ft:`EDUCATION\n\nDEGREE 1\nUndergraduate Degree or equivalent.\n\nDEGREE 2\nUndergraduate degree in specific skilled area or equivalent or an undergraduate degree and a diploma or apprenticeship in specific skilled area or equivalent.\n\nDEGREE 3\nGraduate degree in specific skilled area, or equivalent.\n\nNotes:\n1. "Degree and Diploma" refer to successful completion of accredited educational program.\n2. [cite_start]"Equivalent" refers to formal training in a non-accredited or non-institutional setting (e.g. apprenticeship). [cite: 1878-1889]`, opts:[{p:13,t:"Degree 1",d:"Undergraduate Degree or equivalent."},{p:26,t:"Degree 2",d:"Undergrad in specific skilled area OR degree + diploma."},{p:39,t:"Degree 3",d:"Graduate degree in specific skilled area."}]},
+    {id:'exp', t:'2. [cite_start]Experience', ft:`EXPERIENCE\n\nDEGREE 1\nUp to two years directly related experience with some experience in a post-secondary setting.\n\nDEGREE 2\nThree to four years directly related experience with some experience in post-secondary setting.\n\nDEGREE 3\nFive or more years directly related experience with some experience in a post-secondary setting. [cite: 1892-1901]`, opts:[{p:20,t:"Degree 1",d:"Up to 2 years experience."},{p:40,t:"Degree 2",d:"3-4 years experience."},{p:60,t:"Degree 3",d:"5+ years experience."}]},
+    {id:'comp', t:'3. [cite_start]Complexity/Judgement', ft:`COMPLEXITY / JUDGEMENT\n\nDEGREE 1\nLimited analysis, reasoning, problem solving... assignments are generally standardized.\n\nDEGREE 2\nModerate degree of analysis... Situations provide some opportunity for standardized solutions... moderate degree of variation.\n\nDEGREE 3\nInterpretative skill and ongoing reasoning... situations are diverse although not unique... Substantial planning may be required.\n\nDEGREE 4\nComplex and highly developed analysis... situations are often unique... Development of methods or procedures.\n\nDEGREE 5\nAll of Degree 4 plus the recommendation of change to established policies. [cite: 1903-1958]`, opts:[{p:25,t:"Degree 1",d:"Limited analysis. Standardized assignments."},{p:50,t:"Degree 2",d:"Moderate analysis. Some variation."},{p:75,t:"Degree 3",d:"Interpretative skill. Diverse situations."},{p:100,t:"Degree 4",d:"Complex analysis. Unique situations."},{p:125,t:"Degree 5",d:"Degree 4 + Recommends Policy Change."}]},
+    {id:'resp', t:'4. Responsibility', ft:`RESPONSIBILITY / ACCOUNTABILITY\n\nDEGREE 1: Overseeing application of policies during shift.\nDEGREE 2: Full range of duties related to a separate, LIMITED ACCESS area.\nDEGREE 3: Duties related to a limited aspect of a separate OPEN ACCESS area.\nDEGREE 4: Full range of duties related to a separate OPEN ACCESS area on a regular basis.\nDEGREE 5: Oversees a complete departmental area of LIMITED SCOPE in an open access area. Assumes management responsibility in absence of supervisor.\nDEGREE 6: Oversees complete area with MULTIPLE FUNCTIONS. Small-scale budget.\nDEGREE 7: Management of complete area of SIGNIFICANT SCOPE. [cite_start]Large-scale budget. [cite: 1960-2008]`, opts:[{p:18,t:"Degree 1",d:"Oversee shift policies."},{p:36,t:"Degree 2",d:"Full duties, Limited Access area."},{p:54,t:"Degree 3",d:"Limited duties, Open Access area."},{p:71,t:"Degree 4",d:"Full duties, Open Access area."},{p:89,t:"Degree 5",d:"Oversees dept, Limited Scope."},{p:107,t:"Degree 6",d:"Oversees dept, Multiple Functions."},{p:125,t:"Degree 7",d:"Management, Significant Scope."}]},
+    {id:'supO', t:'5. [cite_start]Supervision Given', ft:`SUPERVISION OF OTHERS\n\nDEGREE 1: No supervision (monitor trained students).\nDEGREE 2: Monitor/train 1-4 Student Assistants.\nDEGREE 3: 5+ Student Assistants OR Recruiting/Dismissal duties.\nDEGREE 4: 1 Part-Time Staff (<15hrs).\nDEGREE 5: 2+ Part-Time Staff (<15hrs).\nDEGREE 6: 1 Full-Time Staff (+ Part-Time).\nDEGREE 7: 2+ Full-Time Staff. [cite: 2010-2035]`, opts:[{p:18,t:"Degree 1",d:"None / Monitor trained students."},{p:36,t:"Degree 2",d:"1-4 Students."},{p:54,t:"Degree 3",d:"5+ Students OR Recruit/Dismiss."},{p:71,t:"Degree 4",d:"1 PT Staff (<15hrs)."},{p:89,t:"Degree 5",d:"2+ PT Staff (<15hrs)."},{p:107,t:"Degree 6",d:"1 FT Staff."},{p:125,t:"Degree 7",d:"2+ FT Staff."}]},
+    {id:'supR', t:'6. Supervision Rec\'d', ft:`SUPERVISION RECEIVED\n\nDEGREE 1: Supervisor skilled in area available DAILY.\nDEGREE 2: Supervisor available daily for majority, but not specific expertise.\nDEGREE 3: No daily access to skilled supervisor. Prioritizing time to time.\nDEGREE 4: No daily access. Research required. [cite_start]Prioritizing regular basis.\nDEGREE 5: Works without supervision and sets policy. [cite: 2037-2059]`, opts:[{p:15,t:"Degree 1",d:"Daily access to skilled supervisor."},{p:30,t:"Degree 2",d:"Majority daily access."},{p:45,t:"Degree 3",d:"No daily access. Occasional research."},{p:60,t:"Degree 4",d:"No daily access. Regular research/prioritizing."},{p:75,t:"Degree 5",d:"None. Sets policy."}]},
+    {id:'cont', t:'7. [cite_start]Contacts', ft:`CONTACTS\n\nDEGREE 1: Basic verbal / Occasional.\nDEGREE 2: Basic verbal / Moderate or Daily.\nDEGREE 3: Basic verbal & written / Tact / Occasional.\nDEGREE 4: Basic verbal & written / Tact / Moderate or Daily.\nDEGREE 5: Complex routine info / Diplomacy / Occasional.\nDEGREE 6: Complex routine info / Diplomacy / Moderate or Daily.\nDEGREE 7: Complex or Confidential / Influencing / Occasional.\nDEGREE 8: Complex or Confidential / Influencing / Moderate or Daily.\nDEGREE 9: Highly sensitive issues / Negotiating / Occasional.\nDEGREE 10: Highly sensitive issues / Negotiating / Moderate or Daily. [cite: 2074-2095]`, opts:[{p:5,t:"Degree 1",d:"Basic / Occasional"},{p:10,t:"Degree 2",d:"Basic / Daily"},{p:15,t:"Degree 3",d:"Tact / Occasional"},{p:20,t:"Degree 4",d:"Tact / Daily"},{p:25,t:"Degree 5",d:"Diplomacy / Occasional"},{p:30,t:"Degree 6",d:"Diplomacy / Daily"},{p:35,t:"Degree 7",d:"Influencing / Occasional"},{p:40,t:"Degree 8",d:"Influencing / Daily"},{p:45,t:"Degree 9",d:"Negotiating / Occasional"},{p:50,t:"Degree 10",d:"Negotiating / Daily"}]},
+    {id:'cond', t:'8. Working Conditions', w:1, isMultiCalculator:true, ft:`WORKING CONDITIONS\nSum of points from I to V.\n\nI. HAZARDS (0.5 - 3.0)\n- Occasional Minor: 0.5\n- Occasional Major: 1.0\n- Frequent Minor: 2.0\n- Frequent Major: 3.0\n\nII. UNPLEASANTNESS (1 - 3)\n- Few interruptions: 1\n- Occasional interruptions: 2\n- Frequent interruptions: 3\n\nIII. EXPOSURE (1 - 3)\n- Occasional unpleasant: 1\n- Routine upset staff: 2\n- Routine upset public: 3\n\nIV. SPACE (1 - 3)\n- Private: 1\n- Private part-day: 2\n- Public: 3\n\nV. [cite_start]HOURS (1 - 3)\n- Regular 9-5: 1\n- Occasional evenings/wknds: 2\n- Always non-business: 3 [cite: 2131-2185]`, subs:[{id:'haz',t:'I. Hazards',opts:[{v:0.5,t:"0.5 - Occasional Minor"},{v:1,t:"1.0 - Occasional Major"},{v:2,t:"2.0 - Frequent Minor"},{v:3,t:"3.0 - Frequent Major"}]},{id:'unp',t:'II. Unpleasantness',opts:[{v:1,t:"1.0 - Few interruptions"},{v:2,t:"2.0 - Occasional interruptions"},{v:3,t:"3.0 - Frequent interruptions"}]},{id:'exp',t:'III. Exposure',opts:[{v:1,t:"1.0 - Occasional unpleasant"},{v:2,t:"2.0 - Routine upset staff"},{v:3,t:"3.0 - Routine upset public"}]},{id:'spc',t:'IV. Space',opts:[{v:1,t:"1.0 - Private space"},{v:2,t:"2.0 - Private space part-day"},{v:3,t:"3.0 - Public space all day"}]},{id:'hrs',t:'V. Hours',opts:[{v:1,t:"1.0 - Regular 9-5"},{v:2,t:"2.0 - Occasional evenings/wknds"},{v:3,t:"3.0 - Always non-business"}]}]},
+    {id:'safe', t:'9. [cite_start]Safety of Others', ft:`SAFETY OF OTHERS\n\nDEGREE 1: Little care (drawers, fire exits).\nDEGREE 2: Some care (stacking, wet floor signs).\nDEGREE 3: Considerable care (guards, PPE, occasional hazmat).\nDEGREE 4: High degree of care (Routine hazmat/equipment). [cite: 2187-2210]`, opts:[{p:10,t:"Degree 1",d:"Little care required."},{p:20,t:"Degree 2",d:"Some care required."},{p:30,t:"Degree 3",d:"Considerable care required."},{p:40,t:"Degree 4",d:"High care required."}]},
+    {id:'dext', t:'10. [cite_start]Dexterity', ft:`DEXTERITY\n\nDEGREE 1: No fine movements.\nDEGREE 2: Accurate coarse movements OR accurate fine movements where speed is secondary.\nDEGREE 3: Accurate fine movements AND speed is a consideration. [cite: 2212-2220]`, opts:[{p:5,t:"Degree 1",d:"Normal."},{p:10,t:"Degree 2",d:"Accurate Coarse / Slow Fine."},{p:15,t:"Degree 3",d:"Accurate Fine + Speed."}]},
+    {id:'phys', t:'11. [cite_start]Physical Demands', ft:`PHYSICAL DEMANDS\n\n1 pt: Light <= 1 hr\n2 pts: Light <= 1 hr (Freq)\n3 pts: Mod/Heavy <= 1 hr\n4 pts: Mod/Heavy <= 1 hr (Freq)\n5 pts: Light 1-2 hrs\n6 pts: Light 1-2 hrs (Freq)\n7 pts: Mod/Heavy 1-2 hrs\n8 pts: Mod/Heavy 1-2 hrs (Freq)\n9 pts: Light > 2 hrs\n10 pts: Light > 2 hrs (Freq)\n11 pts: Mod/Heavy > 2 hrs\n12 pts: Mod/Heavy > 2 hrs (Freq) [cite: 2244-2251]`, opts:[{p:1,t:"1 pt",d:"Light exertion <= 1 hr"},{p:2,t:"2 pts",d:"Light <= 1 hr (Freq 3+/sem)"},{p:3,t:"3 pts",d:"Mod/Heavy <= 1 hr"},{p:4,t:"4 pts",d:"Mod/Heavy <= 1 hr (Freq 3+/sem)"},{p:5,t:"5 pts",d:"Light 1-2 hrs"},{p:6,t:"6 pts",d:"Light 1-2 hrs (Freq 3+/sem)"},{p:7,t:"7 pts",d:"Mod/Heavy 1-2 hrs"},{p:8,t:"8 pts",d:"Mod/Heavy 1-2 hrs (Freq 3+/sem)"},{p:9,t:"9 pts",d:"Light > 2 hrs"},{p:10,t:"10 pts",d:"Light > 2 hrs (Freq 3+/sem)"},{p:11,t:"11 pts",d:"Mod/Heavy > 2 hrs"},{p:12,t:"12 pts",d:"Mod/Heavy > 2 hrs (Freq 3+/sem)"}]},
+    {id:'ment', t:'12. Mental Effort', ft:`MENTAL EFFORT\n\nDEGREE 1: Low/normal concentration. Occasional short periods.\nDEGREE 2: Moderate concentration (short duration) or occasional sustained. Normal pace.\nDEGREE 3: Moderate/high concentration (2-3 hrs). Busy pace.\nDEGREE 4: High concentration (most of day). [cite_start]Hectic pace. [cite: 2254-2266]`, opts:[{p:20,t:"Degree 1",d:"Low/Normal concentration."},{p:40,t:"Degree 2",d:"Moderate concentration."},{p:60,t:"Degree 3",d:"Mod/High concentration."},{p:80,t:"Degree 4",d:"High concentration."}]},
+    {id:'inst', t:'13. Instruction Delivery', ft:`INSTRUCTION DELIVERY\n\nDEGREE 1: New students. Proper use of area. Not complex.\nDEGREE 2: 1-on-1 assist. Moderately complex steps.\nDEGREE 3: Full class or 1-on-1. Documentation provided.\nDEGREE 4: Full class or 1-on-1 on demand. Complex procedures. [cite_start]Mastery. [cite: 2269-2283]`, opts:[{p:25,t:"Degree 1",d:"Introductory / Non-complex."},{p:50,t:"Degree 2",d:"One-on-one / Moderately complex."},{p:75,t:"Degree 3",d:"Full Class / Documentation."},{p:100,t:"Degree 4",d:"Complex procedures / Mastery."}]}
+];
+
+const salaryMatrix=[{g:1,s:["$47,907","$49,621","$51,336","$53,051","$54,765","$56,480"]},{g:2,s:["$51,336","$53,051","$54,765","$56,480","$58,195","$59,909"]},{g:3,s:["$54,765","$56,480","$58,195","$59,909","$61,624","$63,339"]},{g:4,s:["$58,195","$59,909","$61,624","$63,339","$65,053","$66,768","$68,483","$70,197"]},{g:5,s:["$61,624","$63,339","$65,053","$66,768","$68,483","$70,197","$71,912","$73,627"]},{g:6,s:["$65,053","$66,768","$68,483","$70,197","$71,912","$73,627","$75,341","$77,056"]},{g:7,s:["$68,483","$70,197","$71,912","$73,627","$75,341","$77,056","$78,771","$80,485"]},{g:8,s:["$71,912","$73,627","$75,341","$77,056","$78,771","$80,485","$82,200","$83,915"]}];
+
+let cur = 0;
+let scores = {};
+let userData = { name: "", position: "", date: new Date().toLocaleDateString() };
+
+window.onload = () => {
+    try {
+        let s = localStorage.getItem('nscad_nate_data');
+        if (s) {
+            let data = JSON.parse(s);
+            scores = data.scores || {};
+            userData = data.userData || {};
         }
-    ];
+        if (!userData.name) userData = { name: "", position: "", date: new Date().toLocaleDateString() };
+        render();
+        updateFooter();
+    } catch (e) {
+        document.getElementById('crash-screen').style.display='block';
+        document.getElementById('main-header').style.display='none';
+        document.getElementById('main-footer').style.display='none';
+    }
+};
 
-    const salaryMatrix = [
-        { group: 1, steps: ["$47,907", "$49,621", "$51,336", "$53,051", "$54,765", "$56,480"] },
-        { group: 2, steps: ["$51,336", "$53,051", "$54,765", "$56,480", "$58,195", "$59,909"] },
-        { group: 3, steps: ["$54,765", "$56,480", "$58,195", "$59,909", "$61,624", "$63,339"] },
-        { group: 4, steps: ["$58,195", "$59,909", "$61,624", "$63,339", "$65,053", "$66,768", "$68,483", "$70,197"] },
-        { group: 5, steps: ["$61,624", "$63,339", "$65,053", "$66,768", "$68,483", "$70,197", "$71,912", "$73,627"] },
-        { group: 6, steps: ["$65,053", "$66,768", "$68,483", "$70,197", "$71,912", "$73,627", "$75,341", "$77,056"] },
-        { group: 7, steps: ["$68,483", "$70,197", "$71,912", "$73,627", "$75,341", "$77,056", "$78,771", "$80,485"] },
-        { group: 8, steps: ["$71,912", "$73,627", "$75,341", "$77,056", "$78,771", "$80,485", "$82,200", "$83,915"] }
-    ];
+function render() {
+    let el = document.getElementById('app-content');
+    if (!factors[cur] && cur < factors.length) cur = 0;
+    if (cur >= factors.length) { renderSummary(el); return; }
 
-    let currentStep = 0;
-    let scores = {};
-
-    window.onload = function() {
-        try {
-            const saved = localStorage.getItem('nscad_v10');
-            if (saved) scores = JSON.parse(saved);
-            renderPage();
-            updateFooter();
-        } catch(e) {
-            document.getElementById('error-msg').innerText = "Error: " + e.message;
-            document.getElementById('error-msg').style.display = 'block';
-        }
-    };
-
-    function renderPage() {
-        const container = document.getElementById('app-content');
-        if (currentStep >= factors.length) { renderSummary(container); return; }
-
-        const f = factors[currentStep];
-        const pct = ((currentStep) / factors.length) * 100;
-        document.getElementById('progressBar').style.width = pct + '%';
-        document.getElementById('btnBack').disabled = (currentStep === 0);
-        document.getElementById('btnNext').innerText = (currentStep === factors.length - 1) ? "Finish" : "Next";
-
-        let html = `
-            <div class="card">
-                <div class="factor-header">
-                    <div class="factor-title">${f.title}</div>
-                    <button class="guidebook-btn" onclick="openGuideModal(${currentStep})">View Full Guidebook Text</button>
+    let f = factors[cur];
+    
+    let headerInputs = "";
+    if (cur === 0) {
+        let posOptions = positions.map(p => `<option value="${p}" ${userData.position===p?'selected':''}>${p}</option>`).join('');
+        headerInputs = `
+        <div class="card">
+            <h3 style="margin-top:0; color:var(--pri);">Employee Details</h3>
+            <div class="details-grid">
+                <div class="input-group">
+                    <label class="input-label">Name</label>
+                    <input type="text" class="input-field" value="${userData.name}" oninput="updateName(this.value)" placeholder="Enter Name">
                 </div>
-        `;
+                <div class="input-group">
+                    <label class="input-label">Date</label>
+                    <input type="text" class="input-field" value="${userData.date}" disabled style="background:#f8f9fa; color:#6c757d;">
+                </div>
+            </div>
+            <div class="input-group">
+                <label class="input-label">Position</label>
+                <select class="input-field" onchange="updatePos(this.value)">
+                    <option value="" disabled ${!userData.position?'selected':''}>Select Position...</option>
+                    ${posOptions}
+                </select>
+            </div>
+        </div>`;
+    }
 
-        if (f.isSub) {
-            f.subs.forEach(sub => {
-                html += `
-                    <div class="sub-section">
-                        <div class="sub-title">${sub.t}</div>
-                        <div class="options-list">
-                            ${sub.opts.map(opt => `
-                                <div class="option-item ${scores[sub.id] === opt.p ? 'selected' : ''}" onclick="selectSub('${sub.id}', ${opt.p})">
-                                    <div class="opt-head"><span class="opt-name">${opt.t}</span><span class="opt-score">${opt.p} pts</span></div>
-                                    <div class="opt-desc">${opt.d}</div>
-                                </div>`).join('')}
-                        </div>
-                    </div>`;
+    let h = headerInputs + `<div class="card"><div class="factor-header"><div class="factor-title">${f.t}</div><button class="guide-btn" onclick="openGuide(${cur})">Guidebook Reference</button></div>`;
+
+    if(f.isMultiCalculator) {
+        h += `<div class="options-list">`;
+        f.subs.forEach(sub => {
+            h += `<div class="sub-section"><div class="sub-title">${sub.t}</div>`;
+            sub.opts.forEach(o => {
+                let isSel = (scores[f.id + '_' + sub.id] === o.v);
+                h += `<div class="opt-item ${isSel?'selected':''}" onclick="selCalc('${f.id}', '${sub.id}', ${o.v})">
+                    <div class="opt-head"><span class="opt-name">${o.t}</span></div>
+                </div>`;
             });
+            h += `</div>`;
+        });
+        h += `<div style="margin-top:20px; text-align:right; font-weight:800; font-size:1.2rem; color:var(--pri);">Total Points: ${getMultiScore(f)}</div>`;
+        h += `</div>`;
+    } else {
+        h += `<div class="options-list">`;
+        f.opts.forEach(o => {
+            let isSel = (scores[f.id] === o.p);
+            h += `<div class="opt-item ${isSel?'selected':''}" onclick="sel('${f.id}',${o.p})">
+                    <div class="opt-head"><span class="opt-name">${o.t}</span><span class="opt-score">${o.p} pts</span></div>
+                    <div class="opt-desc">${o.d}</div>
+                  </div>`;
+        });
+        h += `</div>`;
+    }
+    
+    el.innerHTML = h + "</div>";
+    window.scrollTo(0, 0);
+}
+
+function updateName(val) { userData.name = val; save(); }
+function updatePos(val) { userData.position = val; save(); }
+function sel(id, p) { scores[id] = p; save(); render(); updateFooter(); }
+function selCalc(fid, subid, val) { scores[fid + '_' + subid] = val; save(); render(); updateFooter(); }
+function getMultiScore(f) { let t = 0; f.subs.forEach(s => { t += (scores[f.id + '_' + s.id] || 0); }); return t; }
+
+function renderSummary(el) {
+    document.getElementById('btnNext').style.display = 'none';
+    document.getElementById('btnBack').onclick = () => { cur--; document.getElementById('btnNext').style.display = 'block'; render(); };
+
+    let t = calcT(), g = getG(t);
+    let rows = '';
+    factors.forEach(f => {
+        if(f.isMultiCalculator) {
+            let val = getMultiScore(f);
+            rows += `<tr><td>${f.t}</td><td><em>Calculated Sub-factors</em></td><td class="summary-val">${val}</td></tr>`;
         } else {
-            html += `<div class="options-list">
-                ${f.options.map(opt => `
-                    <div class="option-item ${scores[f.id] === opt.p ? 'selected' : ''}" onclick="selectOption('${f.id}', ${opt.p})">
-                        <div class="opt-head"><span class="opt-name">${opt.t}</span><span class="opt-score">${opt.p} pts</span></div>
-                        <div class="opt-desc">${opt.d}</div>
-                    </div>`).join('')}
-            </div>`;
+            let val = scores[f.id] || 0;
+            let opt = f.opts.find(o => o.p === val);
+            let d = opt ? `${opt.t}: ${opt.d}` : "-";
+            rows += `<tr><td>${f.t}</td><td>${d}</td><td class="summary-val">${val}</td></tr>`;
         }
-        html += `</div>`;
-        container.innerHTML = html;
-        window.scrollTo(0,0);
-    }
+    });
 
-    function renderSummary(container) {
-        document.getElementById('progressBar').style.width = '100%';
-        document.getElementById('btnNext').style.display = 'none';
-        
-        const total = calcTotal();
-        const group = getGroup(total);
-
-        container.innerHTML = `
-            <div class="card" style="text-align:center;">
-                <h2 style="color:var(--primary);">Assessment Complete</h2>
-                <div style="background:#eef6fb; padding:20px; border-radius:8px;">
-                    <div>Total Points: <strong style="font-size:2rem;">${total}</strong></div>
-                    <div style="font-size:1.5rem; color:var(--primary); text-decoration:underline; cursor:pointer;" onclick="openSalaryModal()">${group} ℹ️</div>
+    el.innerHTML = `
+        <div class="card">
+            <div class="print-header" style="display:none; text-align:center;">
+                <h1>NSCAD Unit II Job Evaluation</h1>
+                <p>Generated: ${userData.date}</p>
+                <div style="border:1px solid #000; padding:15px; margin:20px 0; text-align:left;">
+                    <p><strong>Employee:</strong> ${userData.name || "____________________"}</p>
+                    <p><strong>Position:</strong> ${userData.position || "____________________"}</p>
                 </div>
-                <button class="btn btn-next" style="margin-top:20px;" onclick="window.print()">Print Report</button>
-            </div>`;
-    }
+            </div>
+            
+            <h2 style="color:var(--pri); margin-top:0;">Evaluation Summary</h2>
+            <div style="background:var(--sel); padding:20px; border:1px solid var(--pri); margin:20px 0; border-radius:8px; text-align:center;">
+                <div style="font-size:3rem; font-weight:800; color:var(--text);">${t} Points</div>
+                <div style="font-size:1.5rem; color:var(--pri); font-weight:700;">Est. ${g}</div>
+            </div>
+            
+            <table class="summary-table">
+                <thead><tr><th>Factor</th><th>Selection</th><th>Points</th></tr></thead>
+                <tbody>${rows}</tbody>
+            </table>
 
-    function openGuideModal(idx) {
-        document.getElementById('modalTitle').innerText = factors[idx].title + " - Manual";
-        document.getElementById('modalBody').innerHTML = factors[idx].fullText;
-        document.getElementById('guideModal').style.display = 'flex';
-    }
+            <div style="margin-top:30px; text-align:center;">
+                <button class="guide-btn btn-print-hide" onclick="window.print()" style="font-size:1.1rem; padding:10px 30px;">Print Report</button>
+            </div>
+        </div>
+    `;
+}
 
-    function openSalaryModal() {
-        const total = calcTotal();
-        const currentGroupStr = getGroup(total);
-        const currentGroupNum = parseInt(currentGroupStr.replace("Group ", ""));
-        
-        const tbody = document.getElementById('salaryBody');
-        tbody.innerHTML = "";
+function exportData() {
+    let dataStr = JSON.stringify({ scores: scores, userData: userData });
+    let safeName = (userData.name || "Unnamed").replace(/[^a-zA-Z0-9]/g,'_');
+    let blob = new Blob([dataStr], {type: "text/plain;charset=utf-8"});
+    let a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `NSCAD_Eval_${safeName}.nate`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
 
-        salaryMatrix.forEach(row => {
-            let tr = document.createElement('tr');
-            if (row.group === currentGroupNum) tr.className = "active-group";
-            let html = `<td>Group ${row.group}</td>`;
-            for(let i=0; i<8; i++) html += `<td>${row.steps[i] || "-"}</td>`;
-            tr.innerHTML = html;
-            tbody.appendChild(tr);
-        });
-        document.getElementById('salaryModal').style.display = 'flex';
-    }
+function importData(input) {
+    let file = input.files[0];
+    if(!file) return;
+    let reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            let data = JSON.parse(e.target.result);
+            scores = data.scores || {};
+            userData = data.userData || { name: "", position: "", date: new Date().toLocaleDateString() };
+            save(); cur = 0; render(); updateFooter();
+            alert("File loaded successfully!");
+        } catch(err) { alert("Error loading file. Invalid .nate format."); }
+    };
+    reader.readAsText(file);
+    input.value = '';
+}
 
-    function closeModal(id) {
-        document.getElementById(id).style.display = 'none';
-    }
-
-    function selectOption(id, val) { scores[id] = val; updateFooter(); renderPage(); }
-    function selectSub(id, val) { scores[id] = val; updateFooter(); renderPage(); }
-    function nextStep() { currentStep++; renderPage(); }
-    function prevStep() { currentStep--; renderPage(); }
-    function hardReset() { if(confirm("Clear?")) { localStorage.removeItem('nscad_v10'); scores={}; currentStep=0; renderPage(); updateFooter(); }}
-
-    function calcTotal() {
-        let t = 0;
-        factors.forEach(f => {
-            if(f.isSub) f.subs.forEach(s => t += (scores[s.id] || 0));
-            else t += (scores[f.id] || 0);
-        });
-        return parseFloat(t.toFixed(1));
-    }
-
-    function getGroup(t) {
-        if (t >= 761) return "Group 8";
-        if (t >= 711) return "Group 7";
-        if (t >= 661) return "Group 6";
-        if (t >= 611) return "Group 5";
-        if (t >= 561) return "Group 4";
-        if (t >= 511) return "Group 3";
-        if (t >= 461) return "Group 2";
-        return "Group 1";
-    }
-
-    function updateFooter() {
-        const t = calcTotal();
-        document.getElementById('totalPoints').innerText = t;
-        document.getElementById('payGroup').innerText = getGroup(t);
-        localStorage.setItem('nscad_v10', JSON.stringify(scores));
-    }
-</script>
-
-</body>
-</html>
+function save() { localStorage.setItem('nscad_nate_data', JSON.stringify({ scores: scores, userData: userData })); }
+function calcT() { let t = 0; factors.forEach(f => { if(f.isMultiCalculator) t += getMultiScore(f); else t += (scores[f.id] || 0); }); return parseFloat(t.toFixed(1)); }
+function getG(t) { if (t >= 761) return "Group 8"; if (t >= 711) return "Group 7"; if (t >= 661) return "Group 6"; if (t >= 611) return "Group 5"; if (t >= 561) return "Group 4"; if (t >= 511) return "Group 3"; if (t >= 461) return "Group 2"; return "Group 1"; }
+function updateFooter() { let t = calcT(); document.getElementById('totalPoints').innerText = t; document.getElementById('payGroup').innerText = getG(t); }
+function nextStep() { cur++; render(); }
+function prevStep() { cur--; render(); }
+function hardReset() { if(confirm("Reset all data?")) { scores={}; userData={ name: "", position: "", date: new Date().toLocaleDateString() }; save(); cur=0; render(); updateFooter(); } }
+function openGuide(i) { document.getElementById('modalTitle').innerText = factors[i].t; document.getElementById('modalBody').innerText = factors[i].ft; document.getElementById('guideModal').style.display = 'flex'; }
+function openSal() { let g = parseInt(getG(calcT()).replace("Group ", "")); let b = document.getElementById('salaryBody'); b.innerHTML = ""; salaryMatrix.forEach(r => { let h = `<tr ${r.g === g ? 'class="active-group"' : ''}><td>Group ${r.g}</td>`; for (let i = 0; i < 8; i++) h += `<td>${r.s[i] || "-"}</td>`; b.innerHTML += h + `</tr>`; }); document.getElementById('salaryModal').style.display = 'flex'; }
+function closeModal(id) { document.getElementById(id).style.display='none'; }
+</script></body></html>
