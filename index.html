@@ -148,7 +148,7 @@
                 <thead><tr><th>Group</th><th>Step 1</th><th>Step 2</th><th>Step 3</th><th>Step 4</th><th>Step 5</th><th>Step 6</th><th>Step 7</th><th>Step 8</th></tr></thead>
                 <tbody id="salaryBody"></tbody>
             </table>
-            [cite_start]<p style="margin-top:15px; font-style:italic; font-size:0.9rem; color:var(--mute);">*Salary data from Collective Agreement Appendix F (2025) [cite: 2184-2186].</p>
+            <p style="margin-top:15px; font-style:italic; font-size:0.9rem; color:var(--mute);">*Salary data from Collective Agreement Appendix F (2025) [cite: 2184-2186].</p>
         </div>
     </div>
 </div>
@@ -175,19 +175,25 @@
 const positions = ["Academic Computing Technician","Ceramics Technician","Design Print & Publishing Technician","Exhibitions Coordinator","Fashion Technician","Film/Media Technician","General and Digital Fabrication Technician","Inter Library Loans/Serials Technician","Jewellery Technician","Library Technician, Cataloguing","Library Technician, Supervisor, Circulation","Media/Academic Computing Technician","Metalshop Technician","Multimedia Technician, Academic Computing","Multimedia Technician, Educational Technology","Multimedia Technician, Software and Equipment","Painting/Drawing Technician","Photo Media Technician, Light Sensitive Processing","Photography Technician, Digital Processes and Infrastructure","Printmaking Technician","Sculpture Technician","Textiles Technician","Woodshop Technician"];
 
 const factors = [
-    {id:'edu', t:'1. Education', ft:`EDUCATION\n\nDEGREE 1\nUndergraduate Degree or equivalent.\n\nDEGREE 2\nUndergraduate degree in specific skilled area or equivalent or an undergraduate degree and a diploma or apprenticeship in specific skilled area or equivalent.\n\nDEGREE 3\nGraduate degree in specific skilled area, or equivalent.\n\nNotes:\n1. "Degree and Diploma" refer to successful completion of accredited educational program.\n2. [cite_start]"Equivalent" refers to formal training in a non-accredited or non-institutional setting (e.g. apprenticeship). [cite: 1878-1889]`, opts:[{p:13,t:"Degree 1",d:"Undergraduate Degree or equivalent."},{p:26,t:"Degree 2",d:"Undergrad in specific skilled area OR degree + diploma."},{p:39,t:"Degree 3",d:"Graduate degree in specific skilled area."}]},
-    {id:'exp', t:'2. [cite_start]Experience', ft:`EXPERIENCE\n\nDEGREE 1\nUp to two years directly related experience with some experience in a post-secondary setting.\n\nDEGREE 2\nThree to four years directly related experience with some experience in post-secondary setting.\n\nDEGREE 3\nFive or more years directly related experience with some experience in a post-secondary setting. [cite: 1892-1901]`, opts:[{p:20,t:"Degree 1",d:"Up to 2 years experience."},{p:40,t:"Degree 2",d:"3-4 years experience."},{p:60,t:"Degree 3",d:"5+ years experience."}]},
-    {id:'comp', t:'3. [cite_start]Complexity/Judgement', ft:`COMPLEXITY / JUDGEMENT\n\nDEGREE 1\nLimited analysis, reasoning, problem solving... assignments are generally standardized.\n\nDEGREE 2\nModerate degree of analysis... Situations provide some opportunity for standardized solutions... moderate degree of variation.\n\nDEGREE 3\nInterpretative skill and ongoing reasoning... situations are diverse although not unique... Substantial planning may be required.\n\nDEGREE 4\nComplex and highly developed analysis... situations are often unique... Development of methods or procedures.\n\nDEGREE 5\nAll of Degree 4 plus the recommendation of change to established policies. [cite: 1903-1958]`, opts:[{p:25,t:"Degree 1",d:"Limited analysis. Standardized assignments."},{p:50,t:"Degree 2",d:"Moderate analysis. Some variation."},{p:75,t:"Degree 3",d:"Interpretative skill. Diverse situations."},{p:100,t:"Degree 4",d:"Complex analysis. Unique situations."},{p:125,t:"Degree 5",d:"Degree 4 + Recommends Policy Change."}]},
-    {id:'resp', t:'4. Responsibility', ft:`RESPONSIBILITY / ACCOUNTABILITY\n\nDEGREE 1: Overseeing application of policies during shift.\nDEGREE 2: Full range of duties related to a separate, LIMITED ACCESS area.\nDEGREE 3: Duties related to a limited aspect of a separate OPEN ACCESS area.\nDEGREE 4: Full range of duties related to a separate OPEN ACCESS area on a regular basis.\nDEGREE 5: Oversees a complete departmental area of LIMITED SCOPE in an open access area. Assumes management responsibility in absence of supervisor.\nDEGREE 6: Oversees complete area with MULTIPLE FUNCTIONS. Small-scale budget.\nDEGREE 7: Management of complete area of SIGNIFICANT SCOPE. [cite_start]Large-scale budget. [cite: 1960-2008]`, opts:[{p:18,t:"Degree 1",d:"Oversee shift policies."},{p:36,t:"Degree 2",d:"Full duties, Limited Access area."},{p:54,t:"Degree 3",d:"Limited duties, Open Access area."},{p:71,t:"Degree 4",d:"Full duties, Open Access area."},{p:89,t:"Degree 5",d:"Oversees dept, Limited Scope."},{p:107,t:"Degree 6",d:"Oversees dept, Multiple Functions."},{p:125,t:"Degree 7",d:"Management, Significant Scope."}]},
-    {id:'supO', t:'5. [cite_start]Supervision Given', ft:`SUPERVISION OF OTHERS\n\nDEGREE 1: No supervision (monitor trained students).\nDEGREE 2: Monitor/train 1-4 Student Assistants.\nDEGREE 3: 5+ Student Assistants OR Recruiting/Dismissal duties.\nDEGREE 4: 1 Part-Time Staff (<15hrs).\nDEGREE 5: 2+ Part-Time Staff (<15hrs).\nDEGREE 6: 1 Full-Time Staff (+ Part-Time).\nDEGREE 7: 2+ Full-Time Staff. [cite: 2010-2035]`, opts:[{p:18,t:"Degree 1",d:"None / Monitor trained students."},{p:36,t:"Degree 2",d:"1-4 Students."},{p:54,t:"Degree 3",d:"5+ Students OR Recruit/Dismiss."},{p:71,t:"Degree 4",d:"1 PT Staff (<15hrs)."},{p:89,t:"Degree 5",d:"2+ PT Staff (<15hrs)."},{p:107,t:"Degree 6",d:"1 FT Staff."},{p:125,t:"Degree 7",d:"2+ FT Staff."}]},
-    {id:'supR', t:'6. Supervision Rec\'d', ft:`SUPERVISION RECEIVED\n\nDEGREE 1: Supervisor skilled in area available DAILY.\nDEGREE 2: Supervisor available daily for majority, but not specific expertise.\nDEGREE 3: No daily access to skilled supervisor. Prioritizing time to time.\nDEGREE 4: No daily access. Research required. [cite_start]Prioritizing regular basis.\nDEGREE 5: Works without supervision and sets policy. [cite: 2037-2059]`, opts:[{p:15,t:"Degree 1",d:"Daily access to skilled supervisor."},{p:30,t:"Degree 2",d:"Majority daily access."},{p:45,t:"Degree 3",d:"No daily access. Occasional research."},{p:60,t:"Degree 4",d:"No daily access. Regular research/prioritizing."},{p:75,t:"Degree 5",d:"None. Sets policy."}]},
-    {id:'cont', t:'7. [cite_start]Contacts', ft:`CONTACTS\n\nDEGREE 1: Basic verbal / Occasional.\nDEGREE 2: Basic verbal / Moderate or Daily.\nDEGREE 3: Basic verbal & written / Tact / Occasional.\nDEGREE 4: Basic verbal & written / Tact / Moderate or Daily.\nDEGREE 5: Complex routine info / Diplomacy / Occasional.\nDEGREE 6: Complex routine info / Diplomacy / Moderate or Daily.\nDEGREE 7: Complex or Confidential / Influencing / Occasional.\nDEGREE 8: Complex or Confidential / Influencing / Moderate or Daily.\nDEGREE 9: Highly sensitive issues / Negotiating / Occasional.\nDEGREE 10: Highly sensitive issues / Negotiating / Moderate or Daily. [cite: 2074-2095]`, opts:[{p:5,t:"Degree 1",d:"Basic / Occasional"},{p:10,t:"Degree 2",d:"Basic / Daily"},{p:15,t:"Degree 3",d:"Tact / Occasional"},{p:20,t:"Degree 4",d:"Tact / Daily"},{p:25,t:"Degree 5",d:"Diplomacy / Occasional"},{p:30,t:"Degree 6",d:"Diplomacy / Daily"},{p:35,t:"Degree 7",d:"Influencing / Occasional"},{p:40,t:"Degree 8",d:"Influencing / Daily"},{p:45,t:"Degree 9",d:"Negotiating / Occasional"},{p:50,t:"Degree 10",d:"Negotiating / Daily"}]},
-    {id:'cond', t:'8. Working Conditions', w:1, isMultiCalculator:true, ft:`WORKING CONDITIONS\nSum of points from I to V.\n\nI. HAZARDS (0.5 - 3.0)\n- Occasional Minor: 0.5\n- Occasional Major: 1.0\n- Frequent Minor: 2.0\n- Frequent Major: 3.0\n\nII. UNPLEASANTNESS (1 - 3)\n- Few interruptions: 1\n- Occasional interruptions: 2\n- Frequent interruptions: 3\n\nIII. EXPOSURE (1 - 3)\n- Occasional unpleasant: 1\n- Routine upset staff: 2\n- Routine upset public: 3\n\nIV. SPACE (1 - 3)\n- Private: 1\n- Private part-day: 2\n- Public: 3\n\nV. [cite_start]HOURS (1 - 3)\n- Regular 9-5: 1\n- Occasional evenings/wknds: 2\n- Always non-business: 3 [cite: 2131-2185]`, subs:[{id:'haz',t:'I. Hazards',opts:[{v:0.5,t:"0.5 - Occasional Minor"},{v:1,t:"1.0 - Occasional Major"},{v:2,t:"2.0 - Frequent Minor"},{v:3,t:"3.0 - Frequent Major"}]},{id:'unp',t:'II. Unpleasantness',opts:[{v:1,t:"1.0 - Few interruptions"},{v:2,t:"2.0 - Occasional interruptions"},{v:3,t:"3.0 - Frequent interruptions"}]},{id:'exp',t:'III. Exposure',opts:[{v:1,t:"1.0 - Occasional unpleasant"},{v:2,t:"2.0 - Routine upset staff"},{v:3,t:"3.0 - Routine upset public"}]},{id:'spc',t:'IV. Space',opts:[{v:1,t:"1.0 - Private space"},{v:2,t:"2.0 - Private space part-day"},{v:3,t:"3.0 - Public space all day"}]},{id:'hrs',t:'V. Hours',opts:[{v:1,t:"1.0 - Regular 9-5"},{v:2,t:"2.0 - Occasional evenings/wknds"},{v:3,t:"3.0 - Always non-business"}]}]},
-    {id:'safe', t:'9. [cite_start]Safety of Others', ft:`SAFETY OF OTHERS\n\nDEGREE 1: Little care (drawers, fire exits).\nDEGREE 2: Some care (stacking, wet floor signs).\nDEGREE 3: Considerable care (guards, PPE, occasional hazmat).\nDEGREE 4: High degree of care (Routine hazmat/equipment). [cite: 2187-2210]`, opts:[{p:10,t:"Degree 1",d:"Little care required."},{p:20,t:"Degree 2",d:"Some care required."},{p:30,t:"Degree 3",d:"Considerable care required."},{p:40,t:"Degree 4",d:"High care required."}]},
-    {id:'dext', t:'10. [cite_start]Dexterity', ft:`DEXTERITY\n\nDEGREE 1: No fine movements.\nDEGREE 2: Accurate coarse movements OR accurate fine movements where speed is secondary.\nDEGREE 3: Accurate fine movements AND speed is a consideration. [cite: 2212-2220]`, opts:[{p:5,t:"Degree 1",d:"Normal."},{p:10,t:"Degree 2",d:"Accurate Coarse / Slow Fine."},{p:15,t:"Degree 3",d:"Accurate Fine + Speed."}]},
-    {id:'phys', t:'11. [cite_start]Physical Demands', ft:`PHYSICAL DEMANDS\n\n1 pt: Light <= 1 hr\n2 pts: Light <= 1 hr (Freq)\n3 pts: Mod/Heavy <= 1 hr\n4 pts: Mod/Heavy <= 1 hr (Freq)\n5 pts: Light 1-2 hrs\n6 pts: Light 1-2 hrs (Freq)\n7 pts: Mod/Heavy 1-2 hrs\n8 pts: Mod/Heavy 1-2 hrs (Freq)\n9 pts: Light > 2 hrs\n10 pts: Light > 2 hrs (Freq)\n11 pts: Mod/Heavy > 2 hrs\n12 pts: Mod/Heavy > 2 hrs (Freq) [cite: 2244-2251]`, opts:[{p:1,t:"1 pt",d:"Light exertion <= 1 hr"},{p:2,t:"2 pts",d:"Light <= 1 hr (Freq 3+/sem)"},{p:3,t:"3 pts",d:"Mod/Heavy <= 1 hr"},{p:4,t:"4 pts",d:"Mod/Heavy <= 1 hr (Freq 3+/sem)"},{p:5,t:"5 pts",d:"Light 1-2 hrs"},{p:6,t:"6 pts",d:"Light 1-2 hrs (Freq 3+/sem)"},{p:7,t:"7 pts",d:"Mod/Heavy 1-2 hrs"},{p:8,t:"8 pts",d:"Mod/Heavy 1-2 hrs (Freq 3+/sem)"},{p:9,t:"9 pts",d:"Light > 2 hrs"},{p:10,t:"10 pts",d:"Light > 2 hrs (Freq 3+/sem)"},{p:11,t:"11 pts",d:"Mod/Heavy > 2 hrs"},{p:12,t:"12 pts",d:"Mod/Heavy > 2 hrs (Freq 3+/sem)"}]},
-    {id:'ment', t:'12. Mental Effort', ft:`MENTAL EFFORT\n\nDEGREE 1: Low/normal concentration. Occasional short periods.\nDEGREE 2: Moderate concentration (short duration) or occasional sustained. Normal pace.\nDEGREE 3: Moderate/high concentration (2-3 hrs). Busy pace.\nDEGREE 4: High concentration (most of day). [cite_start]Hectic pace. [cite: 2254-2266]`, opts:[{p:20,t:"Degree 1",d:"Low/Normal concentration."},{p:40,t:"Degree 2",d:"Moderate concentration."},{p:60,t:"Degree 3",d:"Mod/High concentration."},{p:80,t:"Degree 4",d:"High concentration."}]},
-    {id:'inst', t:'13. Instruction Delivery', ft:`INSTRUCTION DELIVERY\n\nDEGREE 1: New students. Proper use of area. Not complex.\nDEGREE 2: 1-on-1 assist. Moderately complex steps.\nDEGREE 3: Full class or 1-on-1. Documentation provided.\nDEGREE 4: Full class or 1-on-1 on demand. Complex procedures. [cite_start]Mastery. [cite: 2269-2283]`, opts:[{p:25,t:"Degree 1",d:"Introductory / Non-complex."},{p:50,t:"Degree 2",d:"One-on-one / Moderately complex."},{p:75,t:"Degree 3",d:"Full Class / Documentation."},{p:100,t:"Degree 4",d:"Complex procedures / Mastery."}]}
+    {id:'edu', t:'1. Education', ft:`EDUCATION\n\nDEGREE 1\nUndergraduate Degree or equivalent.\n\nDEGREE 2\nUndergraduate degree in specific skilled area or equivalent or an undergraduate degree and a diploma or apprenticeship in specific skilled area or equivalent.\n\nDEGREE 3\nGraduate degree in specific skilled area, or equivalent.\n\nNotes on Education:\n1. "Degree and Diploma" refer to successful completion of accredited educational program.\n2. "Equivalent" refers to formal training in a non-accredited or non-institutional setting (for example, an apprenticeship); or formal education not resulting in a degree or a diploma, (for example experiences with multiple programs in university). [cite: 1878-1889]`, opts:[{p:13,t:"Degree 1",d:"Undergraduate Degree or equivalent."},{p:26,t:"Degree 2",d:"Undergraduate degree in specific skilled area or equivalent or an undergraduate degree and a diploma or apprenticeship in specific skilled area or equivalent."},{p:39,t:"Degree 3",d:"Graduate degree in specific skilled area, or equivalent."}]},
+    
+    {id:'exp', t:'2. Experience', ft:`EXPERIENCE\n\nDEGREE 1\nUp to two years directly related experience with some experience in a post-secondary setting.\n\nDEGREE 2\nThree to four years directly related experience with some experience in post-secondary setting.\n\nDEGREE 3\nFive or more years directly related experience with some experience in a post-secondary setting.\n\nExperience Definition:\nThis factor serves as a scale of measurement for the amount of practical experience that an average individual having the appropriate theoretical knowledge, specific education and specialized training would require to be able to perform the job duties.\nDirectly related experience consists of two parts: (1) the practical application of the knowledge and skills required to do the job and (2) delivery of skills and knowledge to people in a learning environment. [cite: 1892-1901]`, opts:[{p:20,t:"Degree 1",d:"Up to two years directly related experience with some experience in a post-secondary setting."},{p:40,t:"Degree 2",d:"Three to four years directly related experience with some experience in post-secondary setting."},{p:60,t:"Degree 3",d:"Five or more years directly related experience with some experience in a post-secondary setting."}]},
+    
+    {id:'comp', t:'3. Complexity/Judgement', ft:`PROBLEM SOLVING/COMPLEXITY/JUDGEMENT\n\nDEGREE 1\nLimited analysis, reasoning, problem solving, creativity or initiative is required. In many, but not all, cases, this may mean selecting the most appropriate course of action from a number of possible solutions, but assignments are generally standardized. Limited planning may be involved on the job. The job requires the application of established methods or procedures. Work may involve a choice of methods.\n\nDEGREE 2\nA moderate degree of analysis, reasoning, problem solving, creativity, or initiative is required. Situations provide some opportunity for standardized solutions and some requirement to recognize and creatively define problems and/or their practical solutions. There is usually a moderate degree of variation and variety in or from daily routines. A moderate degree of planning may be necessary. The job requires adapting established methods or procedures. Work involves a choice of methods or procedures.\n\nDEGREE 3\nInterpretative skill and ongoing, reasoning, problem solving, creativity, or initiative is required. This may require using logical, evaluative thinking to define problems, collect information, establish facts and form valid solutions. Situations are diverse although not unique and offer considerable opportunity for creativity and mental challenge. Substantial planning may be required. The job requires that changes be recommended to established methods or procedures. Work involves a choice of methods or procedures or sequence of operation.\n\nDEGREE 4\nComplex and highly developed analysis, reasoning, problem solving, creativity, or initiative is required as with new technologies. Situations are often unique and typically require a great degree of mental challenge. This includes the development of methods or procedures. Complex planning may be required.\n\nDEGREE 5\nThe job requires all of Degree 4 plus the recommendation of change to established policies.\n\n[Full Factor Notes included in manual] [cite: 1903-1958]`, opts:[{p:25,t:"Degree 1",d:"Limited analysis, reasoning, problem solving, creativity or initiative is required. Assignments are generally standardized."},{p:50,t:"Degree 2",d:"Moderate degree of analysis, reasoning, problem solving, creativity, or initiative is required. Situations provide some opportunity for standardized solutions."},{p:75,t:"Degree 3",d:"Interpretative skill and ongoing, reasoning, problem solving, creativity, or initiative is required. Situations are diverse although not unique."},{p:100,t:"Degree 4",d:"Complex and highly developed analysis, reasoning, problem solving, creativity, or initiative is required as with new technologies. Situations are often unique."},{p:125,t:"Degree 5",d:"The job requires all of Degree 4 plus the recommendation of change to established policies."}]},
+    
+    {id:'resp', t:'4. Responsibility', ft:`RESPONSIBILITY/ACCOUNTABILITY\n\nDEGREE 1:\nResponsible for overseeing the application of a department or studio policies and procedures during their shift.\n\nDEGREE 2:\nDEGREE I functions plus responsibility for performing a full range of duties related to a separate, limited access area or function. May include the signing of Time Sheets for Student Assistants.\n\nDEGREE 3:\nPerforms all duties of Degrees I and II and is responsible for performing duties and functions related to a limited aspect of a separate open access area.\n\nDEGREE 4:\nPerforms all duties of Degrees I and II and is responsible for performing a full range of duties (which may include researching cost of budget items) and all functions related to a separate open access area on a regular basis.\n\nDEGREE 5:\nOversees a complete departmental area or specialized function of limited scope in an open access area. Assumes management responsibility for area in absence of supervisor. Responsibilities may include management of grants received to supplement budget or staffing needs.\n\nDEGREE 6:\nOversees a complete departmental area or function with multiple functions. Assumes management responsibility for area in absence of supervisor and/or is responsible for preparation and presentation of small-scale budget.\n\nDEGREE 7:\nResponsible for the management of a complete departmental area or function of significant scope and is responsible for the preparation and presentation of large-scale budget.\n\n[Full Factor Notes included in manual] [cite: 1960-2008]`, opts:[{p:18,t:"Degree 1",d:"Responsible for overseeing the application of a department or studio policies and procedures during their shift."},{p:36,t:"Degree 2",d:"DEGREE I functions plus responsibility for performing a full range of duties related to a separate, limited access area or function."},{p:54,t:"Degree 3",d:"Performs all duties of Degrees I and II and is responsible for performing duties and functions related to a limited aspect of a separate open access area."},{p:71,t:"Degree 4",d:"Performs all duties of Degrees I and II and is responsible for performing a full range of duties and all functions related to a separate open access area on a regular basis."},{p:89,t:"Degree 5",d:"Oversees a complete departmental area or specialized function of limited scope in an open access area. Assumes management responsibility in absence of supervisor."},{p:107,t:"Degree 6",d:"Oversees a complete departmental area or function with multiple functions. Assumes management responsibility in absence of supervisor and/or is responsible for preparation and presentation of small-scale budget."},{p:125,t:"Degree 7",d:"Responsible for the management of a complete departmental area or function of significant scope and is responsible for the preparation and presentation of large-scale budget."}]},
+    
+    {id:'supO', t:'5. Supervision Given', ft:`SUPERVISION OF OTHERS\n\nDEGREE 1.\nNo supervision of others. May be responsible for monitoring trained Student Assistants during their shift.\n\nDEGREE 2.\nResponsible for day to day monitoring and training of Student Assistants; periodically assumes some of the normal supervisory responsibilities over others. Responsible for supervision of 1 - 4 Student Assistants per semester.\n\nDEGREE 3\nAll of Degree 2 and responsible for the supervision of 5 or more Student Assistants or equivalent per semester OR Duties include recruiting, substantial training and dismissal of Student Assistants.\n\nDEGREE 4\nThe job requires the employee... to assume some of the normal supervisory responsibilities over others... Responsible for supervision of 1 Part Time Unit II Employee or equivalent who works for less than 15 hours per week.\n\nDEGREE 5\nAll of Degree 4 plus responsible for 2 or more Part Time Unit II Employees or equivalent who work for less than 15 hours per week.\n\nDEGREE 6\nThe job requires the employee... to assume the normal supervisory responsibilities... Responsible for 1 Full Time Unit II Employee and 2 or more Part Time Unit II Employees or equivalent.\n\nDEGREE 7: All of Degree 6 plus responsible for 2 or more Full Time or equivalent Unit II Employees. Responsible for determining and recommending staffing needs for the area. `, opts:[{p:18,t:"Degree 1",d:"No supervision of others. May be responsible for monitoring trained Student Assistants during their shift."},{p:36,t:"Degree 2",d:"Responsible for day to day monitoring and training of Student Assistants; periodically assumes some of the normal supervisory responsibilities over others. Responsible for supervision of 1 - 4 Student Assistants per semester."},{p:54,t:"Degree 3",d:"All of Degree 2 and responsible for the supervision of 5 or more Student Assistants or equivalent per semester OR Duties include recruiting, substantial training and dismissal of Student Assistants."},{p:71,t:"Degree 4",d:"Responsible for supervision of 1 Part Time Unit II Employee or equivalent who works for less than 15 hours per week."},{p:89,t:"Degree 5",d:"Responsible for 2 or more Part Time Unit II Employees or equivalent who work for less than 15 hours per week."},{p:107,t:"Degree 6",d:"Responsible for 1 Full Time Unit II Employee and 2 or more Part Time Unit II Employees or equivalent."},{p:125,t:"Degree 7",d:"Responsible for 2 or more Full Time or equivalent Unit II Employees."}]},
+    
+    {id:'supR', t:'6. Supervision Rec\'d', ft:`SUPERVISION RECEIVED\n\nDEGREE 1\nSupervisor skilled in area of expertise is available daily. There is daily access to supervisor for interpretation...\n\nDEGREE 2\nSupervisor skilled in area of expertise is available daily for majority of tasks, but not for specific area of expertise in which employee is skilled. There is weekly or occasional access to supervisor...\n\nDEGREE 3\nEmployee does not have daily access to supervisor skilled in area of expertise. Occasionally may be required to research to provide solutions... prioritizing by employee is necessary from time to time.\n\nDEGREE 4\nEmployee does not have daily access to supervisor skilled in area of expertise. Often is required to research to provide solutions... prioritizing by employee is necessary on a regular basis... conflicting suggestions may require interpretation...\n\nDEGREE 5\nAll of Degree 4 and employee works without supervision and sets policy based on the academic needs of the area. `, opts:[{p:15,t:"Degree 1",d:"Supervisor skilled in area of expertise is available daily. Daily access for interpretation."},{p:30,t:"Degree 2",d:"Supervisor skilled in area available daily for majority of tasks, but not for specific area of expertise. Weekly or occasional access."},{p:45,t:"Degree 3",d:"Employee does not have daily access to supervisor skilled in area of expertise. Occasionally required to research. Prioritizing necessary from time to time."},{p:60,t:"Degree 4",d:"Employee does not have daily access to supervisor skilled in area of expertise. Often required to research. Prioritizing necessary on a regular basis."},{p:75,t:"Degree 5",d:"Works without supervision and sets policy based on the academic needs of the area."}]},
+    
+    {id:'cont', t:'7. Contacts', ft:`CONTACTS\n\nDEGREE 1: Basic verbal contacts following department protocol... Frequency is occasional.\n\nDEGREE 2: Same as Degree 1 where frequency is moderate or daily.\n\nDEGREE 3: Basic verbal and written contacts... Tact and discretion required... Frequency is occasional.\n\nDEGREE 4: Same as Degree 3 where frequency is moderate or daily.\n\nDEGREE 5: Contacts require complex verbal and written exchange of routine information... Tact and diplomacy are required... Frequency is occasional.\n\nDEGREE 6: Same as Degree 5 where frequency is moderate or daily.\n\nDEGREE 7: Contacts require complex or confidential verbal and written exchange of complex or confidential information... Tact and diplomacy and human relations skills are required... Frequency is occasional.\n\nDEGREE 8: Same as Degree 7 where frequency is moderate or daily.\n\nDEGREE 9: Contacts require complex or confidential verbal and/or written exchange... Contacts are a major element of the job requiring considerable communication and human relations skills... dealing with highly sensitive issues. Frequency is occasional.\n\nDEGREE 10: Same as Degree 9 where frequency is moderate or daily. `, opts:[{p:5,t:"Degree 1",d:"Basic verbal contacts following department protocol with students and other employees. Frequency is occasional."},{p:10,t:"Degree 2",d:"Basic verbal contacts following department protocol. Frequency is moderate or daily."},{p:15,t:"Degree 3",d:"Basic verbal and written contacts following department protocol. Tact and discretion required. Frequency is occasional."},{p:20,t:"Degree 4",d:"Basic verbal and written contacts. Tact and discretion required. Frequency is moderate or daily."},{p:25,t:"Degree 5",d:"Contacts require complex verbal and written exchange of routine information. Tact and diplomacy required. Frequency is occasional."},{p:30,t:"Degree 6",d:"Contacts require complex verbal and written exchange of routine information. Tact and diplomacy required. Frequency is moderate or daily."},{p:35,t:"Degree 7",d:"Contacts require complex or confidential verbal and written exchange of complex or confidential information. Tact and diplomacy required. Frequency is occasional."},{p:40,t:"Degree 8",d:"Contacts require complex or confidential verbal and written exchange of complex or confidential information. Tact and diplomacy required. Frequency is moderate or daily."},{p:45,t:"Degree 9",d:"Contacts require complex or confidential verbal/written exchange of complex or confidential information. Major element of job. Highly sensitive issues. Frequency is occasional."},{p:50,t:"Degree 10",d:"Contacts require complex or confidential verbal/written exchange of complex or confidential information. Major element of job. Highly sensitive issues. Frequency is moderate or daily."}]},
+    {id:'cond', t:'8. Working Conditions', w:1, isMultiCalculator:true, ft:`WORKING CONDITIONS\nSum of points from I to V.\n\nI. HAZARDS (0.5 - 3.0)\n- Occasional Minor: 0.5\n- Occasional Major: 1.0\n- Frequent Minor: 2.0\n- Frequent Major: 3.0\n\nII. UNPLEASANT CONDITIONS (1 - 3)\n- Few interruptions: 1\n- Occasional interruptions: 2\n- Frequent interruptions: 3\n\nIII. EXPOSURE (1 - 3)\n- Occasional unpleasant: 1\n- Routine upset staff: 2\n- Routine upset public: 3\n\nIV. SPACE (1 - 3)\n- Private: 1\n- Private part-day: 2\n- Public: 3\n\nV. WORKING HOURS (1 - 3)\n- Regular 9-5: 1\n- Occasional evenings/wknds: 2\n- Always non-business: 3 `, subs:[{id:'haz',t:'I. Hazards',opts:[{v:0.5,t:"0.5 - Occasional exposure to Minor Hazards"},{v:1,t:"1.0 - Occasional exposure to Major Hazards"},{v:2,t:"2.0 - Frequent/routine exposure to Minor Hazards"},{v:3,t:"3.0 - Frequent/routine exposure to Major Hazards"}]},{id:'unp',t:'II. Unpleasant Conditions',opts:[{v:1,t:"1.0 - Few interruptions"},{v:2,t:"2.0 - Occasional interruptions"},{v:3,t:"3.0 - Frequent interruptions"}]},{id:'exp',t:'III. Exposure',opts:[{v:1,t:"1.0 - Occasional exposure to unpleasant/demanding staff"},{v:2,t:"2.0 - Routine encounters with upset staff"},{v:3,t:"3.0 - Routine encounters with upset staff and general public"}]},{id:'spc',t:'IV. Space',opts:[{v:1,t:"1.0 - Has a private space to work in"},{v:2,t:"2.0 - Has access to a private space for part of the day"},{v:3,t:"3.0 - Works in a public space all day"}]},{id:'hrs',t:'V. Working Hours',opts:[{v:1,t:"1.0 - Works regular 9-5"},{v:2,t:"2.0 - Occasional work in evenings or weekends"},{v:3,t:"3.0 - Always works during non-business hours"}]}]},
+    {id:'safe', t:'9. Safety of Others', ft:`SAFETY OF OTHERS\n\nDEGREE 1\nLittle degree of care required to prevent injury or harm to others.\n(Ex: Closing file drawers, keeping fire exits clear.)\n\nDEGREE 2\nSome degree of care required to prevent injury or harm to others.\n(Ex: Stacking supplies, monitoring electrical overloads, posting wet floor signs.)\n\nDEGREE 3\nConsiderable degree of care required to prevent injury or harm to others.\n(Ex: Providing safety guards, PPE, occasional use of hazardous materials.)\n\nDEGREE 4\nHigh degree of care required to prevent injury or harm to others.\n(Ex: Routine use of hazardous materials and/or equipment.) [cite: 2187-2210]`, opts:[{p:10,t:"Degree 1",d:"Little degree of care required to prevent injury or harm to others."},{p:20,t:"Degree 2",d:"Some degree of care required to prevent injury or harm to others."},{p:30,t:"Degree 3",d:"Considerable degree of care required to prevent injury or harm to others."},{p:40,t:"Degree 4",d:"High degree of care required to prevent injury or harm to others."}]},
+    {id:'dext', t:'10. Dexterity', ft:`DEXTERITY\n\nDEGREE 1\nThe duties of the position do not normally involve the operation of tools, equipment or machinery requiring fine movements.\n\nDEGREE 2\nSome duties of the position normally require the performance of tasks that demand accurate coarse movements or normally require the performance of tasks that demand accurate fine movements where speed is a secondary consideration.\n\nDEGREE 3\nThe duties of the position normally require the performance of tasks that demand accurate fine movements and where speed is a consideration. The operation of the equipment or machinery is a significant responsibility of the job. [cite: 2212-2220]`, opts:[{p:5,t:"Degree 1",d:"The duties do not normally involve the operation of tools, equipment or machinery requiring fine movements."},{p:10,t:"Degree 2",d:"Some duties of the position normally require the performance of tasks that demand accurate coarse movements or normally require the performance of tasks that demand accurate fine movements where speed is a secondary consideration."},{p:15,t:"Degree 3",d:"The duties of the position normally require the performance of tasks that demand accurate fine movements and where speed is a consideration. The operation of the equipment or machinery is a significant responsibility of the job."}]},
+    {id:'phys', t:'11. Physical Demands', ft:`PHYSICAL DEMANDS\n\n1 point: Light physical exertion required up to and including one hour.\n2 points: Same as above 3 or more times per semester.\n3 points: Moderate or heavy physical exertion required up to and including one hour.\n4 points: Same as above 3 or more times per semester.\n5 points: Light physical exertion required over one hour and up to and including two hours.\n6 points: Same as above 3 or more times per semester.\n7 points: Moderate or heavy physical exertion required over one hour and up to and including two hours.\n8 points: Same as above 3 or more times per semester.\n9 points: Light physical exertion required in excess of two hours.\n10 points: Same as above 3 or more times per semester.\n11 points: Moderate or heavy physical exertion required in excess of two hours.\n12 points: Same as above 3 or more times per semester. `, opts:[{p:1,t:"1 point",d:"Light physical exertion required up to and including one hour."},{p:2,t:"2 points",d:"Light physical exertion required up to and including one hour (3 or more times per semester)."},{p:3,t:"3 points",d:"Moderate or heavy physical exertion required up to and including one hour."},{p:4,t:"4 points",d:"Moderate or heavy physical exertion required up to and including one hour (3 or more times per semester)."},{p:5,t:"5 points",d:"Light physical exertion required over one hour and up to and including two hours."},{p:6,t:"6 points",d:"Light physical exertion required over one hour and up to and including two hours (3 or more times per semester)."},{p:7,t:"7 points",d:"Moderate or heavy physical exertion required over one hour and up to and including two hours."},{p:8,t:"8 points",d:"Moderate or heavy physical exertion required over one hour and up to and including two hours (3 or more times per semester)."},{p:9,t:"9 points",d:"Light physical exertion required in excess of two hours."},{p:10,t:"10 points",d:"Light physical exertion required in excess of two hours (3 or more times per semester)."},{p:11,t:"11 points",d:"Moderate or heavy physical exertion required in excess of two hours."},{p:12,t:"12 points",d:"Moderate or heavy physical exertion required in excess of two hours (3 or more times per semester)."}]},
+    {id:'ment', t:'12. Mental Effort', ft:`MENTAL EFFORT\n\nDEGREE 1\nDuties require low/normal concentration that is necessary to produce error free work. The work involves occasional short periods of concentration.\n\nDEGREE 2\nSome duties require moderate concentration for periods of short duration (one hour or less) although there may be occasional periods of concentration for sustained duration, i.e. more than one hour. Pace is normal... but there may be periods of high pressure on occasion.\n\nDEGREE 3\nSome duties require moderate/high concentration for periods of two to three hours for special projects or to meet deadlines. Pace is usually busy.\n\nDEGREE 4\nMost duties require high concentration for most of the day (due to heavy volume, pressure of deadlines, and exactness of work). Pace is extremely hectic. `, opts:[{p:20,t:"Degree 1",d:"Duties require low/normal concentration that is necessary to produce error free work. The work involves occasional short periods of concentration."},{p:40,t:"Degree 2",d:"Some duties require moderate concentration for periods of short duration (one hour or less) although there may be occasional periods of concentration for sustained duration, i.e. more than one hour. Pace is normal... but there may be periods of high pressure on occasion."},{p:60,t:"Degree 3",d:"Some duties require moderate/high concentration for periods of two to three hours for special projects or to meet deadlines. Pace is usually busy."},{p:80,t:"Degree 4",d:"Most duties require high concentration for most of the day (due to heavy volume, pressure of deadlines, and exactness of work). Pace is extremely hectic."}]},
+    {id:'inst', t:'13. Instruction Delivery', ft:`INSTRUCTION DELIVERY\n\nDEGREE 1\nGives instructions to new students on the proper use of the area. These instructions do not involve a complex series of steps.\n\nDEGREE 2\nEmployee is expected to assist students one-on-one with techniques in use of materials, software, or equipment in the area. Moderately complex steps are involved.\n\nDEGREE 3\nEmployee is expected to give full class or one-on-one instruction on techniques in use of materials, software, or equipment in the area. Employee may have to provide some documentation... Academic objectives... are supported.\n\nDEGREE 4\nEmployee is expected to give full class or one-on-one instruction on demand for complex procedures and techniques and to provide documentation or notes on the topic. This instruction will directly affect and improve the students' abilities to master the required curriculum. `, opts:[{p:25,t:"Degree 1",d:"Gives instructions to new students on the proper use of the area. These instructions do not involve a complex series of steps."},{p:50,t:"Degree 2",d:"Employee is expected to assist students one-on-one with techniques in use of materials, software, or equipment in the area. Moderately complex steps are involved."},{p:75,t:"Degree 3",d:"Employee is expected to give full class or one-on-one instruction on techniques in use of materials, software, or equipment in the area. Employee may have to provide some documentation, instructional charts or notes to students."},{p:100,t:"Degree 4",d:"Employee is expected to give full class or one-on-one instruction on demand for complex procedures and techniques and to provide documentation or notes on the topic. This instruction will directly affect and improve the students' abilities to master the required curriculum."}]}
 ];
 
 const salaryMatrix=[{g:1,s:["$47,907","$49,621","$51,336","$53,051","$54,765","$56,480"]},{g:2,s:["$51,336","$53,051","$54,765","$56,480","$58,195","$59,909"]},{g:3,s:["$54,765","$56,480","$58,195","$59,909","$61,624","$63,339"]},{g:4,s:["$58,195","$59,909","$61,624","$63,339","$65,053","$66,768","$68,483","$70,197"]},{g:5,s:["$61,624","$63,339","$65,053","$66,768","$68,483","$70,197","$71,912","$73,627"]},{g:6,s:["$65,053","$66,768","$68,483","$70,197","$71,912","$73,627","$75,341","$77,056"]},{g:7,s:["$68,483","$70,197","$71,912","$73,627","$75,341","$77,056","$78,771","$80,485"]},{g:8,s:["$71,912","$73,627","$75,341","$77,056","$78,771","$80,485","$82,200","$83,915"]}];
@@ -197,86 +203,86 @@ let scores = {};
 let userData = { name: "", position: "", date: new Date().toLocaleDateString() };
 
 window.onload = () => {
-    try {
-        let s = localStorage.getItem('nscad_nate_data');
-        if (s) {
-            let data = JSON.parse(s);
-            scores = data.scores || {};
-            userData = data.userData || {};
-        }
-        if (!userData.name) userData = { name: "", position: "", date: new Date().toLocaleDateString() };
-        render();
-        updateFooter();
-    } catch (e) {
-        document.getElementById('crash-screen').style.display='block';
-        document.getElementById('main-header').style.display='none';
-        document.getElementById('main-footer').style.display='none';
-    }
+    try {
+        let s = localStorage.getItem('nscad_nate_data');
+        if (s) {
+            let data = JSON.parse(s);
+            scores = data.scores || {};
+            userData = data.userData || {};
+        }
+        if (!userData.name) userData = { name: "", position: "", date: new Date().toLocaleDateString() };
+        render();
+        updateFooter();
+    } catch (e) {
+        document.getElementById('crash-screen').style.display='block';
+        document.getElementById('main-header').style.display='none';
+        document.getElementById('main-footer').style.display='none';
+    }
 };
 
 function render() {
-    let el = document.getElementById('app-content');
-    if (!factors[cur] && cur < factors.length) cur = 0;
-    if (cur >= factors.length) { renderSummary(el); return; }
+    let el = document.getElementById('app-content');
+    if (!factors[cur] && cur < factors.length) cur = 0;
+    if (cur >= factors.length) { renderSummary(el); return; }
 
-    let f = factors[cur];
-    
-    let headerInputs = "";
-    if (cur === 0) {
-        let posOptions = positions.map(p => `<option value="${p}" ${userData.position===p?'selected':''}>${p}</option>`).join('');
-        headerInputs = `
-        <div class="card">
-            <h3 style="margin-top:0; color:var(--pri);">Employee Details</h3>
-            <div class="details-grid">
-                <div class="input-group">
-                    <label class="input-label">Name</label>
-                    <input type="text" class="input-field" value="${userData.name}" oninput="updateName(this.value)" placeholder="Enter Name">
-                </div>
-                <div class="input-group">
-                    <label class="input-label">Date</label>
-                    <input type="text" class="input-field" value="${userData.date}" disabled style="background:#f8f9fa; color:#6c757d;">
-                </div>
-            </div>
-            <div class="input-group">
-                <label class="input-label">Position</label>
-                <select class="input-field" onchange="updatePos(this.value)">
-                    <option value="" disabled ${!userData.position?'selected':''}>Select Position...</option>
-                    ${posOptions}
-                </select>
-            </div>
-        </div>`;
-    }
+    let f = factors[cur];
+    
+    let headerInputs = "";
+    if (cur === 0) {
+        let posOptions = positions.map(p => `<option value="${p}" ${userData.position===p?'selected':''}>${p}</option>`).join('');
+        headerInputs = `
+        <div class="card">
+            <h3 style="margin-top:0; color:var(--pri);">Employee Details</h3>
+            <div class="details-grid">
+                <div class="input-group">
+                    <label class="input-label">Name</label>
+                    <input type="text" class="input-field" value="${userData.name}" oninput="updateName(this.value)" placeholder="Enter Name">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Date</label>
+                    <input type="text" class="input-field" value="${userData.date}" disabled style="background:#f8f9fa; color:#6c757d;">
+                </div>
+            </div>
+            <div class="input-group">
+                <label class="input-label">Position</label>
+                <select class="input-field" onchange="updatePos(this.value)">
+                    <option value="" disabled ${!userData.position?'selected':''}>Select Position...</option>
+                    ${posOptions}
+                </select>
+            </div>
+        </div>`;
+    }
 
-    let h = headerInputs + `<div class="card"><div class="factor-header"><div class="factor-title">${f.t}</div><button class="guide-btn" onclick="openGuide(${cur})">Guidebook Reference</button></div>`;
+    let h = headerInputs + `<div class="card"><div class="factor-header"><div class="factor-title">${f.t}</div><button class="guide-btn" onclick="openGuide(${cur})">Guidebook Reference</button></div>`;
 
-    if(f.isMultiCalculator) {
-        h += `<div class="options-list">`;
-        f.subs.forEach(sub => {
-            h += `<div class="sub-section"><div class="sub-title">${sub.t}</div>`;
-            sub.opts.forEach(o => {
-                let isSel = (scores[f.id + '_' + sub.id] === o.v);
-                h += `<div class="opt-item ${isSel?'selected':''}" onclick="selCalc('${f.id}', '${sub.id}', ${o.v})">
-                    <div class="opt-head"><span class="opt-name">${o.t}</span></div>
-                </div>`;
-            });
-            h += `</div>`;
-        });
-        h += `<div style="margin-top:20px; text-align:right; font-weight:800; font-size:1.2rem; color:var(--pri);">Total Points: ${getMultiScore(f)}</div>`;
-        h += `</div>`;
-    } else {
-        h += `<div class="options-list">`;
-        f.opts.forEach(o => {
-            let isSel = (scores[f.id] === o.p);
-            h += `<div class="opt-item ${isSel?'selected':''}" onclick="sel('${f.id}',${o.p})">
-                    <div class="opt-head"><span class="opt-name">${o.t}</span><span class="opt-score">${o.p} pts</span></div>
-                    <div class="opt-desc">${o.d}</div>
-                  </div>`;
-        });
-        h += `</div>`;
-    }
-    
-    el.innerHTML = h + "</div>";
-    window.scrollTo(0, 0);
+    if(f.isMultiCalculator) {
+        h += `<div class="options-list">`;
+        f.subs.forEach(sub => {
+            h += `<div class="sub-section"><div class="sub-title">${sub.t}</div>`;
+            sub.opts.forEach(o => {
+                let isSel = (scores[f.id + '_' + sub.id] === o.v);
+                h += `<div class="opt-item ${isSel?'selected':''}" onclick="selCalc('${f.id}', '${sub.id}', ${o.v})">
+                    <div class="opt-head"><span class="opt-name">${o.t}</span></div>
+                </div>`;
+            });
+            h += `</div>`;
+        });
+        h += `<div style="margin-top:20px; text-align:right; font-weight:800; font-size:1.2rem; color:var(--pri);">Total Points: ${getMultiScore(f)}</div>`;
+        h += `</div>`;
+    } else {
+        h += `<div class="options-list">`;
+        f.opts.forEach(o => {
+            let isSel = (scores[f.id] === o.p);
+            h += `<div class="opt-item ${isSel?'selected':''}" onclick="sel('${f.id}',${o.p})">
+                    <div class="opt-head"><span class="opt-name">${o.t}</span><span class="opt-score">${o.p} pts</span></div>
+                    <div class="opt-desc">${o.d}</div>
+                  </div>`;
+        });
+        h += `</div>`;
+    }
+    
+    el.innerHTML = h + "</div>";
+    window.scrollTo(0, 0);
 }
 
 function updateName(val) { userData.name = val; save(); }
@@ -286,79 +292,79 @@ function selCalc(fid, subid, val) { scores[fid + '_' + subid] = val; save(); ren
 function getMultiScore(f) { let t = 0; f.subs.forEach(s => { t += (scores[f.id + '_' + s.id] || 0); }); return t; }
 
 function renderSummary(el) {
-    document.getElementById('btnNext').style.display = 'none';
-    document.getElementById('btnBack').onclick = () => { cur--; document.getElementById('btnNext').style.display = 'block'; render(); };
+    document.getElementById('btnNext').style.display = 'none';
+    document.getElementById('btnBack').onclick = () => { cur--; document.getElementById('btnNext').style.display = 'block'; render(); };
 
-    let t = calcT(), g = getG(t);
-    let rows = '';
-    factors.forEach(f => {
-        if(f.isMultiCalculator) {
-            let val = getMultiScore(f);
-            rows += `<tr><td>${f.t}</td><td><em>Calculated Sub-factors</em></td><td class="summary-val">${val}</td></tr>`;
-        } else {
-            let val = scores[f.id] || 0;
-            let opt = f.opts.find(o => o.p === val);
-            let d = opt ? `${opt.t}: ${opt.d}` : "-";
-            rows += `<tr><td>${f.t}</td><td>${d}</td><td class="summary-val">${val}</td></tr>`;
-        }
-    });
+    let t = calcT(), g = getG(t);
+    let rows = '';
+    factors.forEach(f => {
+        if(f.isMultiCalculator) {
+            let val = getMultiScore(f);
+            rows += `<tr><td>${f.t}</td><td><em>Calculated Sub-factors</em></td><td class="summary-val">${val}</td></tr>`;
+        } else {
+            let val = scores[f.id] || 0;
+            let opt = f.opts.find(o => o.p === val);
+            let d = opt ? `${opt.t}: ${opt.d}` : "-";
+            rows += `<tr><td>${f.t}</td><td>${d}</td><td class="summary-val">${val}</td></tr>`;
+        }
+    });
 
-    el.innerHTML = `
-        <div class="card">
-            <div class="print-header" style="display:none; text-align:center;">
-                <h1>NSCAD Unit II Job Evaluation</h1>
-                <p>Generated: ${userData.date}</p>
-                <div style="border:1px solid #000; padding:15px; margin:20px 0; text-align:left;">
-                    <p><strong>Employee:</strong> ${userData.name || "____________________"}</p>
-                    <p><strong>Position:</strong> ${userData.position || "____________________"}</p>
-                </div>
-            </div>
-            
-            <h2 style="color:var(--pri); margin-top:0;">Evaluation Summary</h2>
-            <div style="background:var(--sel); padding:20px; border:1px solid var(--pri); margin:20px 0; border-radius:8px; text-align:center;">
-                <div style="font-size:3rem; font-weight:800; color:var(--text);">${t} Points</div>
-                <div style="font-size:1.5rem; color:var(--pri); font-weight:700;">Est. ${g}</div>
-            </div>
-            
-            <table class="summary-table">
-                <thead><tr><th>Factor</th><th>Selection</th><th>Points</th></tr></thead>
-                <tbody>${rows}</tbody>
-            </table>
+    el.innerHTML = `
+        <div class="card">
+            <div class="print-header" style="display:none; text-align:center;">
+                <h1>NSCAD Unit II Job Evaluation</h1>
+                <p>Generated: ${userData.date}</p>
+                <div style="border:1px solid #000; padding:15px; margin:20px 0; text-align:left;">
+                    <p><strong>Employee:</strong> ${userData.name || "____________________"}</p>
+                    <p><strong>Position:</strong> ${userData.position || "____________________"}</p>
+                </div>
+            </div>
+            
+            <h2 style="color:var(--pri); margin-top:0;">Evaluation Summary</h2>
+            <div style="background:var(--sel); padding:20px; border:1px solid var(--pri); margin:20px 0; border-radius:8px; text-align:center;">
+                <div style="font-size:3rem; font-weight:800; color:var(--text);">${t} Points</div>
+                <div style="font-size:1.5rem; color:var(--pri); font-weight:700;">Est. ${g}</div>
+            </div>
+            
+            <table class="summary-table">
+                <thead><tr><th>Factor</th><th>Selection</th><th>Points</th></tr></thead>
+                <tbody>${rows}</tbody>
+            </table>
 
-            <div style="margin-top:30px; text-align:center;">
-                <button class="guide-btn btn-print-hide" onclick="window.print()" style="font-size:1.1rem; padding:10px 30px;">Print Report</button>
-            </div>
-        </div>
-    `;
+            <div style="margin-top:30px; text-align:center;">
+                <button class="guide-btn btn-print-hide" onclick="window.print()" style="font-size:1.1rem; padding:10px 30px;">Print Report</button>
+            </div>
+        </div>
+    `;
 }
 
 function exportData() {
-    let dataStr = JSON.stringify({ scores: scores, userData: userData });
-    let safeName = (userData.name || "Unnamed").replace(/[^a-zA-Z0-9]/g,'_');
-    let blob = new Blob([dataStr], {type: "text/plain;charset=utf-8"});
-    let a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = `NSCAD_Eval_${safeName}.nate`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    let dataStr = JSON.stringify({ scores: scores, userData: userData });
+    let safeName = (userData.name || "Unnamed").replace(/[^a-zA-Z0-9]/g,'_');
+    let blob = new Blob([dataStr], {type: "text/plain;charset=utf-8"});
+    let a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `NSCAD_Eval_${safeName}.nate`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 }
 
 function importData(input) {
-    let file = input.files[0];
-    if(!file) return;
-    let reader = new FileReader();
-    reader.onload = function(e) {
-        try {
-            let data = JSON.parse(e.target.result);
-            scores = data.scores || {};
-            userData = data.userData || { name: "", position: "", date: new Date().toLocaleDateString() };
-            save(); cur = 0; render(); updateFooter();
-            alert("File loaded successfully!");
-        } catch(err) { alert("Error loading file. Invalid .nate format."); }
-    };
-    reader.readAsText(file);
-    input.value = '';
+    let file = input.files[0];
+    if(!file) return;
+    let reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            let data = JSON.parse(e.target.result);
+            scores = data.scores || {};
+            userData = data.userData || { name: "", position: "", date: new Date().toLocaleDateString() };
+            save(); cur = 0; render(); updateFooter();
+            alert("File loaded successfully!");
+        } catch(err) { alert("Error loading file. Invalid .nate format."); }
+    };
+    reader.readAsText(file);
+    input.value = '';
 }
 
 function save() { localStorage.setItem('nscad_nate_data', JSON.stringify({ scores: scores, userData: userData })); }
